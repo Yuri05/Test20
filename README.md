@@ -5,6 +5,6 @@
 
 [non exsiting link](http://nonexisting.xxx/nonexisting.yyy)
 
-[Tralala](./#Tralala)
+[Tralala](#Tralala)
 
 # Tralala
