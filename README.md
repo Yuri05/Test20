@@ -1,6 +1,6 @@
 # Section
 
-[subsection](#Subsection)
+[subsection](#subsection)
 
 [nonexisting](#nonexisting)
 
