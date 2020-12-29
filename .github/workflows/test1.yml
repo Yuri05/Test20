@@ -4,8 +4,12 @@ jobs:
   test1:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v2.1.4
+        uses: actions/setup-node@main
+      - name: setup remark
+        run: npm install remark-validate-links
       - name: setup remark cli
         run: npm install --global remark-cli remark-validate-links
       - name: validate links
