@@ -1,0 +1,17 @@
+name: Test2
+
+on: [push]
+
+jobs:
+  markdown-link-check1:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: wei/wget@v1
+      with:
+        args: -O mlc_config.json https://raw.githubusercontent.com/Yuri05/docs/master/.github/workflows/mlc_config.json
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        use-verbose-mode: 'yes'
+        config-file: 'mlc_config.json'
