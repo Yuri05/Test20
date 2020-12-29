@@ -7,11 +7,11 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@main
+        uses: actions/setup-node@c46424eee26de4078d34105d3de3cc4992202b1e
       - name: setup remark cli
         run: npm install -g remark-cli remark-validate-links
       - name: validate links
-        run: remark -u validate-links .
+        run: remark -u validate-links . -f
   
   
   
