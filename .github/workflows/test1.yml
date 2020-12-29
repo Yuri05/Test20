@@ -9,7 +9,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@main
       - name: setup remark cli
-        run: npm install remark-cli remark-validate-links
+        run: npm install -g remark-cli remark-validate-links
       - name: validate links
         run: remark -u validate-links .
   
