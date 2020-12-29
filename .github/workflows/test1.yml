@@ -9,7 +9,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@c46424eee26de4078d34105d3de3cc4992202b1e
       - name: setup remark cli
-        run: npm install -g remark-cli remark-validate-links
+        run: npm install -g remark-cli remark-validate-links --quiet --no-progress
       - name: validate links
         run: remark -u validate-links . -f
   
