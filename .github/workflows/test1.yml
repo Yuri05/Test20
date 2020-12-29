@@ -12,7 +12,11 @@ jobs:
         run: npm install -g remark-cli remark-validate-links --quiet --no-progress
       - name: validate links
         run: remark -u validate-links . -f
-  
+      - name: Upload Readme
+        uses: actions/upload-artifact@v1
+        with:
+          name: readme
+          path: README.md
   
   
   
