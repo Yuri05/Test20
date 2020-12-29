@@ -1,1 +1,16 @@
-
+name: Test1
+on: [push]
+jobs:
+  test1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v2.1.4
+      - name: setup remark cli
+        run: npm install --global remark-cli remark-validate-links
+      - name: validate links
+        run: remark -u validate-links .
+  
+  
+  
+  
