@@ -1,4 +1,4 @@
-name: Check Markdown links
+name: Test 2
 
 on: [push]
 
@@ -12,8 +12,3 @@ jobs:
         use-quiet-mode: 'yes'
         use-verbose-mode: 'yes'
         config-file: 'https://raw.githubusercontent.com/Yuri05/docs/master/.github/workflows/mlc_config.json'
-  markdown-link-check2:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: serokell/xrefcheck-action@v1
