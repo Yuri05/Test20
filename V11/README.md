@@ -85,11 +85,13 @@ Also, in case the user selects individual observed data sets instead of folders 
 [Active influx transports Lumen=>Mucosa with the Hill kinetics: cannot create simulations](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1929)
 [Load from Template: multiselect+Delete](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/834)
 [Symbol Change in Legend for Population Simulation](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1522)
+[Clone simulation: Plot title and plot description not copied](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1568)
 [Liver zonation: wrong observer formula](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2133)
 [Make parameter "Fraction of blood for sampling" visible](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1976)
 [AUCR and CmaxR not calculated if formulation with more than 1 Particle bin used](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1755)
 [Edit Database Query does not display "old" values correctly](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2055)
 [Load project from snapshot: new option "Run simulations"](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2158)
+[Display "OK" and "Cancel" buttons in the value origin window](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1484)
 
 ### MoBi
 [Running multiple parameter identifications in parallel](https://github.com/Open-Systems-Pharmacology/MoBi/issues/639)
@@ -98,6 +100,7 @@ Also, in case the user selects individual observed data sets instead of folders 
 [Import parameter values from Excel: error when a cell contains a formula](https://github.com/Open-Systems-Pharmacology/MoBi/issues/678)
 [Dimension 'Flow per body surface area' not available in DimensionFactory](https://github.com/Open-Systems-Pharmacology/MoBi/issues/694)
 [Deleting a molecule node connected to a reaction does not remove the molecul from reaction](https://github.com/Open-Systems-Pharmacology/MoBi/issues/690)
+[New path keyword: ALL_FLOATING_MOLECULES TODO link]()
 
 ### PK-Sim and MoBi
 [Adding different sheets requires same column names](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2069)
@@ -107,3 +110,13 @@ Also, in case the user selects individual observed data sets instead of folders 
 [Importer: setting molweight of imported observed data not possible](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2073)
 [Import Observed Data: "Import unit from a column" is case sensitive](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1931)
 [Multiselect for color settings in chart editor](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/553)
+[Data import tool naming pattern is not working as expected](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1380)
+[Importer: loading configuration with molecule not mapped](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1384)
+[Importer: "Molecule" MetaData saved to configuration even when not mapped](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1387)
+[Data import misaligns values/column header](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1404)
+[Data import: group data is not used](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1432)
+[Data import cannot handle correctly arithmetic error of a fraction given as percentage](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1405)
+[Importer: Handling of "invalid" files](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1409)
+[Importer: Cannot select " " as unit for "Fraction"](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1500)
+[Importer should perform better when loading several datasets](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1492)
+[Importer: "Reset mapping based on current sheet" should be a button.](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1513)
