@@ -33,8 +33,6 @@ When creating an individual, a new option **"Disease State"** is provided, which
 
 For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
 
-
-
 ### Protein expressions as standalone building block
 Till PK-Sim version 10 protein expression profiles could only be created _within an individual or a population_.
 Starting with the version 11, protein expressions can be created independently (like all other building blocks) and thus can be **reused** in different individuals/populations.
@@ -50,9 +48,9 @@ For the details s. the [documentation](https://docs.open-systems-pharmacology.or
 <img src="https://user-images.githubusercontent.com/25061876/162787879-a4ef5caa-fb0e-495c-b85c-53b04a054314.png">
 </p>
 
-### New preclinical species (beta version)
+### [Experimental!] New preclinical species (beta version)
 Two new preclinical species were added: **Cat** and **Cattle**.
-The validation of the new species is not fully finalized yet, so both species are provided as a beta version.
+The validation of the new species is not fully finalized yet, so both species are provided as an _experimental_ version.
 _Cattle_ models can be used with IV applications only.
 
 ## Fixed issues and Improvements
