@@ -48,7 +48,7 @@ For the details s. the [documentation](https://docs.open-systems-pharmacology.or
 <img src="https://user-images.githubusercontent.com/25061876/162787879-a4ef5caa-fb0e-495c-b85c-53b04a054314.png">
 </p>
 
-### [Experimental!] New preclinical species (beta version)
+### [Experimental!] New preclinical species
 Two new preclinical species were added: **Cat** and **Cattle**.
 The validation of the new species is not fully finalized yet, so both species are provided as an _experimental_ version.
 _Cattle_ models can be used with IV applications only.
@@ -60,6 +60,20 @@ This extension is partucularly used for the newly introduced **Container Criteri
 <img src="https://user-images.githubusercontent.com/25061876/162804251-845290d2-0ac8-4a71-b62f-5acabb87345d.png">
 <img src="https://user-images.githubusercontent.com/25061876/162804399-3952afb9-d81f-477a-93de-3f4c91b7fee8.png">
 </p>
+
+### Color group observed data when drag and dropping folders to charts
+When adding data sets via drag-and-drop of a folder (or multiple folders), all data sets within one folder can be assigned to a single color. This behavior is optional and can be changed by a setting integrated into the context menu of the “Observed Data” entry of the building blocks explorer. This setting is valid for all subfolders.
+
+![grafik](https://user-images.githubusercontent.com/25061876/162808473-41bfb4e1-27ba-49cc-8868-d445e190c8f8.png)
+
+
+Alternatively this feature can be toggled on and off from the User Settings:
+* PK-Sim: under “Utilities” -> “Options” -> “General” -> “Colors”
+![grafik](https://user-images.githubusercontent.com/25061876/162808820-fdc9519f-63b6-4569-8e33-6f99e47ba055.png)
+* MoBi:  under “Utilities” -> “Options” -> “Chart Options”
+![grafik](https://user-images.githubusercontent.com/25061876/162809088-98352e02-64a9-4387-a854-66ec0f3bc197.png)
+
+Also, in case the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one should be assigned a new color, and they should not be grouped according to the folder they belong to. 
 
 ## Fixed issues and Improvements
 
