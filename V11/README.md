@@ -53,6 +53,14 @@ Two new preclinical species were added: **Cat** and **Cattle**.
 The validation of the new species is not fully finalized yet, so both species are provided as an _experimental_ version.
 _Cattle_ models can be used with IV applications only.
 
+### Extension of Container Criteria in MoBi
+Container Criteria can be concatenated now not only by AND but also by OR operator
+This extension is partucularly used for the newly introduced **Container Criteria of local molecule parameters**
+<p align="center">
+<img src="https://user-images.githubusercontent.com/25061876/162804251-845290d2-0ac8-4a71-b62f-5acabb87345d.png">
+<img src="https://user-images.githubusercontent.com/25061876/162804399-3952afb9-d81f-477a-93de-3f4c91b7fee8.png">
+</p>
+
 ## Fixed issues and Improvements
 
 ### PK-Sim
@@ -70,7 +78,12 @@ _Cattle_ models can be used with IV applications only.
 [Load project from snapshot: new option "Run simulations"](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2158)
 
 ### MoBi
-
+[Running multiple parameter identifications in parallel](https://github.com/Open-Systems-Pharmacology/MoBi/issues/639)
+[Cannot import molecular weight if it does not match the molecule](https://github.com/Open-Systems-Pharmacology/MoBi/issues/667)
+[Import parameter values from Excel: error if a column without name is present](https://github.com/Open-Systems-Pharmacology/MoBi/issues/679)
+[Import parameter values from Excel: error when a cell contains a formula](https://github.com/Open-Systems-Pharmacology/MoBi/issues/678)
+[Dimension 'Flow per body surface area' not available in DimensionFactory](https://github.com/Open-Systems-Pharmacology/MoBi/issues/694)
+[Deleting a molecule node connected to a reaction does not remove the molecul from reaction](https://github.com/Open-Systems-Pharmacology/MoBi/issues/690)
 
 ### PK-Sim and MoBi
 [Adding different sheets requires same column names](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2069)
