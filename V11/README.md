@@ -57,16 +57,19 @@ _Cattle_ models can be used with IV applications only.
 
 ### PK-Sim
 [Add "Urine compartment emptying" as an event template to PK-Sim](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1933)
+[Running multiple parameter identifications in parallel](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1901)
 [Listing individual and population should order first by type](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2164)
 [Active transports Lumen<=> Mucosa: too many transports are created in case the transporter direction (Influx/Efflux/...) is not the same in all GI segments.](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1930)
 [Active influx transports Lumen=>Mucosa with the Hill kinetics: cannot create simulations](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1929)
 [Load from Template: multiselect+Delete](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/834)
+[Symbol Change in Legend for Population Simulation](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1522)
 [Liver zonation: wrong observer formula](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2133)
 [Make parameter "Fraction of blood for sampling" visible](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1976)
 [AUCR and CmaxR not calculated if formulation with more than 1 Particle bin used](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1755)
+[Edit Database Query does not display "old" values correctly](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2055)
+[Load project from snapshot: new option "Run simulations"](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2158)
 
 ### MoBi
-
 
 
 ### PK-Sim and MoBi
@@ -75,3 +78,5 @@ _Cattle_ models can be used with IV applications only.
 [Importer: Error when measurement column has missing entries](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1192)
 [Importer: "Guess" unit each time a column for time or measurement is selected](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2075)
 [Importer: setting molweight of imported observed data not possible](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2073)
+[Import Observed Data: "Import unit from a column" is case sensitive](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1931)
+[Multiselect for color settings in chart editor](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/553)
