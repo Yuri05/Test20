@@ -1,3 +1,7 @@
+<p align="center">
+<img width="182" src="https://user-images.githubusercontent.com/25061876/162976311-ed939cb7-7abb-4b29-a6ce-d0726a44479f.png">
+</p>
+
 # Beta-Release of PK-Sim 11 and MoBi 11
 Dear OSP users, 
 
