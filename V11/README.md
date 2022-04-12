@@ -79,7 +79,7 @@ Alternatively this feature can be toggled on and off from the User Settings:
 Also, in case the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one should be assigned a new color, and they should not be grouped according to the folder they belong to. 
 
 ### High Screen Resolution Support
-Users reported some issue with the layout of PK-Sim or MoBi when using custom font scaling on 4k monitors (or screen with high resolutions). Some UI elements were hidden, some icons were blurry, some text hard to read etc. Version 11 of PK-Sim and MoBi should now behave as expected, even when using custom font scaling. Give it a try and let us know.
+Users reported some issues with the layout of PK-Sim or MoBi when using custom font scaling on 4k monitors (or screen with high resolutions). Some UI elements were hidden, some icons were blurry, some text hard to read etc. The version 11 of PK-Sim and MoBi should address these issues and the tools should now behave as expected, even when using custom font scaling. Give it a try and let us know.
 
 
 ## Fixed issues and Improvements
