@@ -6,10 +6,10 @@
 Dear OSP users, 
 
 We are happy to announce that the new Version 11 of PK-Sim and MoBi is now available for beta-testing. The beta-test phase will last until the **end of April**.
-The goal of the beta release is to give you an opportunity to test the new features and to let us know if you have any problems or feedback regarding the new implementation.
+The goal of the beta release is to give the commmunity an opportunity to test the new features and to report any problems and give feedback regarding the new implementation.
 
 ## How can you test the new features?
-You can use the *portable versions* of PK-Sim and MoBi  (download links below). The portable versions do not require installation and can be used in parallel to the official OSP Suite 9.
+You can use the *portable versions* of PK-Sim and MoBi  (download links below). The portable versions do not require installation and can be used in parallel to the official OSP Suite 10.
 
 Your feedback on the new features is highly welcome.
 
@@ -23,12 +23,11 @@ Your feedback on the new features is highly welcome.
 
 ## New features
 
-### Creating individuals and populations with CKD (Chronic Kidney Disease)
+### [Experimental!] Creating individuals and populations with CKD (Chronic Kidney Disease)
 
 Already in version 10 of the software it was possible to use predefined CKD templates (based on the publication [Malik PRV, Yeung CHT, Advani U, Dije S, Edginton AN. A Physiological Approach to Pharmacokinetics in Chronic Kidney Disease. J Clin Pharmacol 2020. 60 Suppl 1: S52-S62. doi: 10.1002/jcph.1713](https://accp1.onlinelibrary.wiley.com/doi/full/10.1002/jcph.1713)).
 
-However, an end user could not define individuals/populations with any covariates (weight, height, ...).<br>
-This flexibility is now offered with PK-Sim version 11. <br>
+With version 11, CKD individuals and populations can now be created dynamically.
 When creating an individual, a new option **"Disease State"** is provided, which allows a selection between _Healthy_ and diseased individuals.
 
 <p align="center">
@@ -37,9 +36,9 @@ When creating an individual, a new option **"Disease State"** is provided, which
 
 For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
 
-### Protein expressions as standalone building block
-Till PK-Sim version 10 protein expression profiles could only be created _within an individual or a population_.
-Starting with the version 11, protein expressions can be created independently (like all other building blocks) and thus can be **reused** in different individuals/populations.
+### Expression Profile as standalone building block
+Until PK-Sim version 10, expression profiles could only be created _within an individual or a population_.
+Starting with the version 11, expression profiles can be created independently (like all other building blocks) and thus can be **reused** in different individuals/populations.
 <p align="center">
 <img src="https://881660647-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FewOAYfFFhObyan6wZQs0%2Fuploads%2Fgit-blob-969bf4fe9c3d8a2534a34cb1a5a4864584c604c6%2FCreateExpressionProfile.png?alt=media">
 <img src="https://user-images.githubusercontent.com/25061876/162777774-ea5c00c7-7c9f-42a5-b411-8d81be0e3ec0.png">
@@ -78,6 +77,10 @@ Alternatively this feature can be toggled on and off from the User Settings:
 ![grafik](https://user-images.githubusercontent.com/25061876/162809088-98352e02-64a9-4387-a854-66ec0f3bc197.png)
 
 Also, in case the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one should be assigned a new color, and they should not be grouped according to the folder they belong to. 
+
+### High Screen Resolution Support
+Users reported some issues with the layout of PK-Sim or MoBi when using custom font scaling on 4k monitors (or screen with high resolutions). Some UI elements were hidden, some icons were blurry, some text hard to read etc. The version 11 of PK-Sim and MoBi should address these issues and the tools should now behave as expected, even when using custom font scaling. Give it a try and let us know.
+
 
 ## Fixed issues and Improvements
 
