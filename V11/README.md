@@ -1,8 +1,8 @@
 # Downloads:
 
-- [Full setup TODO](TODO)
+- [Full setup **TODO**](TODO)
 
-- [**ospsuite** R package TODO]()
+- [**ospsuite** R package **TODO**]()
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
 
@@ -18,7 +18,7 @@ Starting with the version 11, expression profiles can be created independently (
 <img src="https://user-images.githubusercontent.com/25061876/162777774-ea5c00c7-7c9f-42a5-b411-8d81be0e3ec0.png">
 </p>
 
-For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-expression-profile)
+For the details s. the [documentation **TODO Update link after docu V11 is merged**](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-expression-profile)
 
 ### Building block templates can be downloaded directly from the OSP GitHub site
 <p align="center">
@@ -59,7 +59,8 @@ When creating an individual, a new option **"Disease State"** is provided, which
 <img width="800" src="https://user-images.githubusercontent.com/25061876/162768013-1c1b7ab9-e980-4d67-ba3c-abbd36630bdb.png">
 </p>
 
-For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
+For the details s. the [documentation **TODO Update link after docu V11 is merged**](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
+
 ### [Experimental!] New preclinical species
 Two new preclinical species were added: **Cat** and **Cattle**.
 The validation of the new species is not fully finalized yet, so both species are provided as an _experimental_ version.
