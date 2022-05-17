@@ -1,40 +1,14 @@
-<p align="center">
-<img width="182" src="https://user-images.githubusercontent.com/25061876/162976311-ed939cb7-7abb-4b29-a6ce-d0726a44479f.png">
-</p>
+# Downloads:
 
-# Beta-Release of PK-Sim 11 and MoBi 11
-Dear OSP users, 
+- [Full setup TODO](TODO)
 
-We are happy to announce that the new Version 11 of PK-Sim and MoBi is now available for beta-testing. The beta-test phase will last until the **end of April**.
-The goal of the beta release is to give the commmunity an opportunity to test the new features and to report any problems and give feedback regarding the new implementation.
+- [**ospsuite** R package TODO]()
 
-## How can you test the new features?
-You can use the *portable versions* of PK-Sim and MoBi  (download links below). The portable versions do not require installation and can be used in parallel to the official OSP Suite 10.
+- [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
 
-Your feedback on the new features is highly welcome.
-
-**Important**: The beta-test versions are not final releases of the software packages: please use them for testing purposes only, but not for productive work.
-
-## Downloads:
-
-- [PK-Sim 11 beta portable](http://pk-sim-portable.open-systems-pharmacology.org)
-
-- [MoBi 11 beta portable](http://mobi-portable.open-systems-pharmacology.org)
+# Release Notes for the Open Systems Pharmacology Software Suite 11
 
 ## New features
-
-### [Experimental!] Creating individuals and populations with CKD (Chronic Kidney Disease)
-
-Already in version 10 of the software it was possible to use predefined CKD templates (based on the publication [Malik PRV, Yeung CHT, Advani U, Dije S, Edginton AN. A Physiological Approach to Pharmacokinetics in Chronic Kidney Disease. J Clin Pharmacol 2020. 60 Suppl 1: S52-S62. doi: 10.1002/jcph.1713](https://accp1.onlinelibrary.wiley.com/doi/full/10.1002/jcph.1713)).
-
-With version 11, CKD individuals and populations can now be created dynamically.
-When creating an individual, a new option **"Disease State"** is provided, which allows a selection between _Healthy_ and diseased individuals.
-
-<p align="center">
-<img width="800" src="https://user-images.githubusercontent.com/25061876/162768013-1c1b7ab9-e980-4d67-ba3c-abbd36630bdb.png">
-</p>
-
-For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
 
 ### Expression Profile as standalone building block
 Until PK-Sim version 10, expression profiles could only be created _within an individual or a population_.
@@ -51,6 +25,41 @@ For the details s. the [documentation](https://docs.open-systems-pharmacology.or
 <img src="https://user-images.githubusercontent.com/25061876/162787879-a4ef5caa-fb0e-495c-b85c-53b04a054314.png">
 </p>
 
+### OSP Platform qualification library and PBPK Models Library
+#### PBPK Models library extended
+New PBPK models added:
+* Ethinylestradiol
+* Mexiletine
+* Moclobemide
+* Omeprazole
+* S-Mephenytoin
+* Tizanidine
+
+#### OSP Qualification reports library extended
+New Qualification reports added:
+* **CYP1A2 DDI** <br>
+This qualification report evaluates the developed PBPK drug-drug interactions (DDI) models network for the ability to perform simulations with the intended purpose to predict cytochrome P450 1A2 (**CYPA12**)-mediated DDI.
+* **CYP2C19 DDI** <br>
+This qualification report evaluates the developed PBPK drug-drug interactions (DDI) models network for the ability to perform simulations with the intended purpose to predict cytochrome P450 2C19 (**CYP2C19**)-mediated DDI.
+
+Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
+#### New releases of OSP Platform qualification library and PBPK Models Library
+As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite and the latest version of the [_OSP Qualification Framework_](https://github.com/Open-Systems-Pharmacology/QualificationPlan/releases/latest):
+* [**_OSP Qualification Reports library_**](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports) 
+* [**_OSP-PBPK-Model-Library_**](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library)
+
+### [Experimental!] Creating individuals and populations with CKD (Chronic Kidney Disease)
+
+Already in version 10 of the software it was possible to use predefined CKD templates (based on the publication [Malik PRV, Yeung CHT, Advani U, Dije S, Edginton AN. A Physiological Approach to Pharmacokinetics in Chronic Kidney Disease. J Clin Pharmacol 2020. 60 Suppl 1: S52-S62. doi: 10.1002/jcph.1713](https://accp1.onlinelibrary.wiley.com/doi/full/10.1002/jcph.1713)).
+
+With version 11, CKD individuals and populations can now be created dynamically.
+When creating an individual, a new option **"Disease State"** is provided, which allows a selection between _Healthy_ and diseased individuals.
+
+<p align="center">
+<img width="800" src="https://user-images.githubusercontent.com/25061876/162768013-1c1b7ab9-e980-4d67-ba3c-abbd36630bdb.png">
+</p>
+
+For the details s. the [documentation](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
 ### [Experimental!] New preclinical species
 Two new preclinical species were added: **Cat** and **Cattle**.
 The validation of the new species is not fully finalized yet, so both species are provided as an _experimental_ version.
