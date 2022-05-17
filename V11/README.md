@@ -90,6 +90,18 @@ Also, in case the user selects individual observed data sets instead of folders 
 ### High Screen Resolution Support
 Users reported some issues with the layout of PK-Sim or MoBi when using custom font scaling on 4k monitors (or screen with high resolutions). Some UI elements were hidden, some icons were blurry, some text hard to read etc. The version 11 of PK-Sim and MoBi should address these issues and the tools should now behave as expected, even when using custom font scaling. Give it a try and let us know.
 
+### New release of the **ospsuite** R package
+
+* Many Fixed issues and Improvements (s. the [**ospsuite** R package news page **TODO**](TODO) for details)
+* TODO - list major new features
+
+S. [documentation of the ospsuite R package](https://www.open-systems-pharmacology.org/OSPSuite-R/) for detailed description and usage examples.
+
+### (Re-)Qualification framework updated
+OSP (Re-)Qualification framework is a technical framework to assess the confidence of specific intended use of the OSP platform. This framework allows for an automatic (re)-qualification workflow of the OSP suite. New release of the OSP (Re-)Qualification framework provides some improvements and bugfixes (s. below).
+
+* (Re-)Qualification framework is not part of the OSP Suite setup (is only required for the creation of qualification reports) and must be installed separately. The latest release can be found [here](https://github.com/Open-Systems-Pharmacology/QualificationPlan/releases/latest)
+* Full documentation of the (Re-)Qualification framework can be found [here](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/qualification)
 
 ## Fixed issues and Improvements
 
@@ -136,3 +148,8 @@ Users reported some issues with the layout of PK-Sim or MoBi when using custom f
 * [Importer: Cannot select " " as unit for "Fraction"](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1500)
 * [Importer should perform better when loading several datasets](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1492)
 * [Importer: "Reset mapping based on current sheet" should be a button.](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1513)
+
+## Notes 
+* The limitation of max. 5000 output time points per simulation was dropped. Now **arbitrary** number of output time points per simulation can be defined. This does not have influence on the simulation time but might have impact e.g. on the memory consumption or on the plotting time in charts. 
+Thus if you have old projects with very high output resolution - please check it (and adjust if required) before simulationg
+* PDF reports (of simulations and building blocks) are not supported anymore.
