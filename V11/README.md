@@ -104,6 +104,9 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * (Re-)Qualification framework is not part of the OSP Suite setup (is only required for the creation of qualification reports) and must be installed separately. The latest release can be found [here](https://github.com/Open-Systems-Pharmacology/QualificationPlan/releases/latest)
 * Full documentation of the (Re-)Qualification framework can be found [here](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/qualification)
 
+### Windows 11 support
+Windows 11 is now officially supported by the OSP Suite.
+
 ## Fixed issues and Improvements
 
 ### PK-Sim
