@@ -93,7 +93,7 @@ Users reported some issues with the layout of PK-Sim or MoBi when using custom f
 
 ### New release of the **ospsuite** R package
 
-* Many Fixed issues and Improvements (s. the [**ospsuite** R package news page](https://www.open-systems-pharmacology.org/OSPSuite-R/news/index.html) and the [**ospsuite** R package release page]([https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v10.0.72](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v11.0.123)) for details)
+* Many Fixed issues and Improvements (s. the [**ospsuite** R package news page](https://www.open-systems-pharmacology.org/OSPSuite-R/news/index.html) and the [**ospsuite** R package release page](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v11.0.123) for details)
 * Major new features:
   * Adds new `DataCombined` class that combines observed data (`DataSet`) and
   simulated data (`SimulationResults`) into a single object. Especially
