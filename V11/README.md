@@ -18,7 +18,7 @@ Starting with the version 11, expression profiles can be created independently (
 <img src="https://user-images.githubusercontent.com/25061876/162777774-ea5c00c7-7c9f-42a5-b411-8d81be0e3ec0.png">
 </p>
 
-For the details s. the [documentation **TODO Update link after docu V11 is merged**](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-expression-profile)
+For the details s. the [documentation](https://docs.open-systems-pharmacology.org/working-with-pk-sim/pk-sim-documentation/pk-sim-expression-profile)
 
 ### Building block templates can be downloaded directly from the OSP GitHub site
 <p align="center">
