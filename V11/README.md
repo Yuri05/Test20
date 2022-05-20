@@ -59,7 +59,7 @@ When creating an individual, a new option **"Disease State"** is provided, which
 <img width="800" src="https://user-images.githubusercontent.com/25061876/162768013-1c1b7ab9-e980-4d67-ba3c-abbd36630bdb.png">
 </p>
 
-For the details s. the [documentation **TODO Update link after docu V11 is merged**](https://docs.open-systems-pharmacology.org/v/v11/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
+For the details s. the [documentation](https://docs.open-systems-pharmacology.org/working-with-pk-sim/pk-sim-documentation/pk-sim-creating-individuals#disease-state) and the original publication by Malik et al.
 
 ### [Experimental!] New preclinical species
 Two new preclinical species were added: **Cat** and **Cattle**.
