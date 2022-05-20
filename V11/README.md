@@ -151,7 +151,7 @@ Windows 11 is now officially supported by the OSP Suite.
 * [Import parameter values from Excel: error when a cell contains a formula](https://github.com/Open-Systems-Pharmacology/MoBi/issues/678)
 * [Dimension 'Flow per body surface area' not available in DimensionFactory](https://github.com/Open-Systems-Pharmacology/MoBi/issues/694)
 * [Deleting a molecule node connected to a reaction does not remove the molecul from reaction](https://github.com/Open-Systems-Pharmacology/MoBi/issues/690)
-* [New path keyword: ALL_FLOATING_MOLECULES TODO link]()
+* [New path keyword: ALL_FLOATING_MOLECULES](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1447)
 
 ### PK-Sim and MoBi
 * [Adding different sheets requires same column names](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2069)
