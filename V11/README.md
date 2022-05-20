@@ -2,7 +2,7 @@
 
 - [Full setup **TODO**](TODO)
 
-- [**ospsuite** R package **TODO**]()
+- [**ospsuite** R package](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v11.0.123)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
 
@@ -93,8 +93,27 @@ Users reported some issues with the layout of PK-Sim or MoBi when using custom f
 
 ### New release of the **ospsuite** R package
 
-* Many Fixed issues and Improvements (s. the [**ospsuite** R package news page **TODO**](TODO) for details)
-* TODO - list major new features
+* Many Fixed issues and Improvements (s. the [**ospsuite** R package news page](https://www.open-systems-pharmacology.org/OSPSuite-R/news/index.html) and the [**ospsuite** R package release page]([https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v10.0.72](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v11.0.123)) for details)
+* Major new features:
+  * Adds new `DataCombined` class that combines observed data (`DataSet`) and
+  simulated data (`SimulationResults`) into a single object. Especially
+  important is the `$toDataFrame()` method of this object that returns a data
+  frame containing combined data from observed and simulated data, which can be
+  further used for visualizations or other analysis.
+
+  * Adds new visualization functions:
+
+    - `plotIndividualTimeProfile()` and `plotPopulationTimeProfile()` to create 
+      time-profile plots.
+
+  * Adds a new class `DefaultPlotConfiguration` to provide plot configurations for 
+  plotting functions.
+
+  * Adds `simulationResultsToDataFrame()` function to convert `SimulationResults`
+  objects into a data frame.
+
+  * All `*ToDataFrame()` functions also get `*ToTibble()` variants to extract a
+  tibble data frame instead of a classical data frame.
 
 S. [documentation of the ospsuite R package](https://www.open-systems-pharmacology.org/OSPSuite-R/) for detailed description and usage examples.
 
