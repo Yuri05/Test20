@@ -23,7 +23,7 @@ For the details s. the [documentation](https://docs.open-systems-pharmacology.or
 
 ### Building block templates can be downloaded directly from the OSP GitHub site
 <p align="center">
-<img src="https://user-images.githubusercontent.com/25061876/162787879-a4ef5caa-fb0e-495c-b85c-53b04a054314.png">
+  <img src="https://user-images.githubusercontent.com/25061876/169697539-10d568b1-9125-4d84-9912-8d4c1aa4ab5c.png">
 </p>
 
 ### OSP Platform qualification library and PBPK Models Library
