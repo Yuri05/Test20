@@ -14,8 +14,9 @@
 Until PK-Sim version 10, expression profiles could only be created _within an individual or a population_.
 Starting with the version 11, **expression profiles can be created independently** (like all other building blocks) and thus can be **reused** in different individuals/populations.
 <p align="center">
-<img src="https://881660647-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FewOAYfFFhObyan6wZQs0%2Fuploads%2Fgit-blob-969bf4fe9c3d8a2534a34cb1a5a4864584c604c6%2FCreateExpressionProfile.png?alt=media">
-<img src="https://user-images.githubusercontent.com/25061876/162777774-ea5c00c7-7c9f-42a5-b411-8d81be0e3ec0.png">
+  <img src="https://user-images.githubusercontent.com/25061876/169696109-3adcb08d-6c7f-454b-ac03-3d4ec9880863.png">
+  <img src="https://user-images.githubusercontent.com/25061876/162777774-ea5c00c7-7c9f-42a5-b411-8d81be0e3ec0.png">
+  <img src="https://user-images.githubusercontent.com/25061876/169696312-9e8b1a42-2f5d-4f8c-b9f7-740f6a9b38a2.png">
 </p>
 
 For the details s. the [documentation](https://docs.open-systems-pharmacology.org/working-with-pk-sim/pk-sim-documentation/pk-sim-expression-profile)
