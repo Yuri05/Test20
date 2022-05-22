@@ -75,7 +75,7 @@ _Cattle_ models can be used with IV applications only.
 
 ### Extension of Container Criteria in MoBi
 Container Criteria can be concatenated now not only by AND but also by OR operator
-This extension is partucularly used for the newly introduced **Container Criteria of local molecule parameters**
+This extension is particularly used for the newly introduced **Container Criteria of local molecule parameters**
 <p align="center">
 <img src="https://user-images.githubusercontent.com/25061876/162804251-845290d2-0ac8-4a71-b62f-5acabb87345d.png">
 <img src="https://user-images.githubusercontent.com/25061876/162804399-3952afb9-d81f-477a-93de-3f4c91b7fee8.png">
@@ -87,7 +87,7 @@ When adding data sets via drag-and-drop of a folder (or multiple folders), all d
 ![grafik](https://user-images.githubusercontent.com/25061876/162808473-41bfb4e1-27ba-49cc-8868-d445e190c8f8.png)
 
 
-Alternatively this feature can be toggled on and off from the User Settings:
+Alternatively, this feature can be toggled on and off from the User Settings:
 * PK-Sim: under “Utilities” -> “Options” -> “General” -> “Colors”
 ![grafik](https://user-images.githubusercontent.com/25061876/162808820-fdc9519f-63b6-4569-8e33-6f99e47ba055.png)
 * MoBi:  under “Utilities” -> “Options” -> “Chart Options”
@@ -157,7 +157,7 @@ Windows 11 is now officially supported by the OSP Suite.
 * [Import parameter values from Excel: error if a column without name is present](https://github.com/Open-Systems-Pharmacology/MoBi/issues/679)
 * [Import parameter values from Excel: error when a cell contains a formula](https://github.com/Open-Systems-Pharmacology/MoBi/issues/678)
 * [Dimension 'Flow per body surface area' not available in DimensionFactory](https://github.com/Open-Systems-Pharmacology/MoBi/issues/694)
-* [Deleting a molecule node connected to a reaction does not remove the molecul from reaction](https://github.com/Open-Systems-Pharmacology/MoBi/issues/690)
+* [Deleting a molecule node connected to a reaction does not remove the molecule from reaction](https://github.com/Open-Systems-Pharmacology/MoBi/issues/690)
 * [New path keyword: ALL_FLOATING_MOLECULES](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1447)
 
 ### PK-Sim and MoBi
@@ -181,5 +181,5 @@ Windows 11 is now officially supported by the OSP Suite.
 
 ## Notes 
 * The limitation of max. 5000 output time points per simulation was dropped. Now **arbitrary** number of output time points per simulation can be defined. This does not have influence on the simulation time but might have impact e.g. on the memory consumption or on the plotting time in charts. 
-Thus if you have old projects with very high output resolution - please check it (and adjust if required) before simulationg
+Thus, if you have old projects with very high output resolution - please check it (and adjust if required) before simulating
 * PDF reports (of simulations and building blocks) are not supported anymore.
