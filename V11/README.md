@@ -39,8 +39,15 @@ New PBPK models added:
 New Qualification reports added:
 * **CYP1A2 DDI** <br>
 This qualification report evaluates the developed PBPK drug-drug interactions (DDI) models network for the ability to perform simulations with the intended purpose to predict cytochrome P450 1A2 (**CYPA12**)-mediated DDI.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Open-Systems-Pharmacology/Qualification-DDI-CYP1A2/v1.2/Qualification/Input/Content/images/DDI_CYP1A2_Compound_Network.png">
+</p>
+
 * **CYP2C19 DDI** <br>
 This qualification report evaluates the developed PBPK drug-drug interactions (DDI) models network for the ability to perform simulations with the intended purpose to predict cytochrome P450 2C19 (**CYP2C19**)-mediated DDI.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Open-Systems-Pharmacology/Qualification-DDI-CYP2C19/v1.2/Qualification/Input/Content/images/DDI_CYP2C19_Compound_Network.png">
+</p>
 
 Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
 #### New releases of OSP Platform qualification library and PBPK Models Library
