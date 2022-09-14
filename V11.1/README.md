@@ -12,6 +12,8 @@
 
 ### New feature 1
 
+_PK-Sim can predict the lottery numbers from the future._
+
 For the details s. the [documentation **TODO**](TODO)
 
 ### OSP Platform qualification library and PBPK Models Library
