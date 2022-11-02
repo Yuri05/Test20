@@ -51,6 +51,35 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
 
 <img src="images/individual_pk_values.png" alt="" data-size="line">
 
+####  Observed Data grouping in PK-Sim simulation figures
+
+When adding data sets to a plot via drag-and-drop of a folder (or multiple folders), all data sets within one folder can be assigned to a single color. This behavior is optional and can be changed by (un)selecting the checkbox "Color group when adding to chart" in the context menu of the “Observed Data” entry of the building blocks explorer. This setting is a central configuration and valid for all subfolders. 
+
+<img src="images/color_grouping_context_menu.png" alt="" data-size="line">
+
+Alternatively this feature can be toggled on and off from the User Settings, under “Utilities” -> “Options” -> “General” -> “Colors”:
+
+<img src="images/color_grouping_in_settings.png" alt="" data-size="line">
+
+When this option is selected and whole folders are dragged and dropped into a plot, the observed data from the same folders will be assigned the same color. However, when the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one will be assigned a new color, and they should not be grouped according to the folder they belong to. 
+
+####  Color grouping tab in the Chart Editor 
+
+A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the lines will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the curves in the chart according to the selection, and then the selection is cleared. The user can then if she wants choose a new selection of metadata and change the coloring once again.
+
+<img src="images/color_grouping_tab.png" alt="" data-size="line">
+
+####  Editing options of multiple curves
+
+In the “Curves and Axis Options” Tab of the Chart Editor a new context menu item has been added called “Edit options for selected”. It is only visible when the user has selected at least two rows.
+
+<img src="images/edit_multiple_curves_context.png" alt="" data-size="line">
+
+Selecting this option opens a new dialog that lists the common option of the curves. Initially the values for the options are not set, and if the user lets any of the options to that initial state, that option will not be edited – meaning that the selected curves will retain for that option the value they had before opening the dialog.
+
+<img src="images/edit_options_dialog.png" alt="" data-size="line">
+
+
 ### OSP Platform qualification library and PBPK Models Library
 #### PBPK Models library extended
 New PBPK models added:
