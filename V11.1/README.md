@@ -79,6 +79,60 @@ Selecting this option opens a new dialog that lists the common option of the cur
 
 ![edit_options_dialog](https://user-images.githubusercontent.com/261477/199485858-15ebdfd1-e7ed-4f0b-90e7-ede3e2994e4c.png)
 
+####  Grouping of results in the Chart Editor
+
+In the result charts of Simulations and Parameter Identifications (Time Profile, Predicted vs. Observed, Residuals vs. Time) the curves in the Chart Editor are grouped according to their Category. Additionally the checkbox "Link Data to Simulations has been added". When selected (un)selecting a simulation curve will also unselected the mapped observed data.
+
+![link_data_to_simulations](https://user-images.githubusercontent.com/37107428/199510440-9002d77d-7387-4516-90b3-8f9cbe050ba9.png)
+
+
+#### Mapping Outputs to Observed Data in Simulations
+
+In Simulations, the newly introduced **Observed Data** Tab can be used to map observed data to the corresponding simulation outputs. In the left part of the grid all the observed data that belong to the opened simulation are listed. When adding or removing observed data the list is updated. Newly added observed data are automatically mapped to simulation outputs according to Organ, Compartment and Molecule meta data of observed data and path elements of the outputs. If no matching output can be found the mapping output is set to **None**. This means that the specified observed data is not mapped to an output. The user can also clear an output mapping by clicking on the **x** button to the right, which will also set the output to **None**.
+
+![In the Data Tab observed data can be mapped to simulation outputs.](https://user-images.githubusercontent.com/37107428/199510841-d908dd1a-3beb-46c3-a9f7-0488320283bb.png)
+
+For each mapping, the scaling can be defined as Lin or Log which determines the residual calculation.
+
+**Scaling**
+
+|     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lin | Residuals are calculated as: Simulation value - Observed value. This means that the residuals are defined by absolute differences. If the magnitudes of values are different for different parameters, the different magnitudes of residuals should be harmonized by corresponding weights (reciprocal values).                                                                                                                                                                                                        |
+| Log | Residuals are calculated as: log(Simulation value) - log(Observed value) = log (Simulation Value / Observed Value). This means that the ratio of values is considered which is independent of the magnitude of the value. But for very small observed values, in particular close to 0 values, this can lead to problems, because log(10E-N) = -N can becomes large. Then, the weights should be manually adjusted. |
+
+To reflect the quality or importance of the Observed Data item or to balance different magnitudes of values in case of Lin scaling, you can edit the weights of each mapping.
+
+#### Predicted vs. Observed Chart in Simulations
+
+For each observed concentration value a point is plotted with observed value as x-Value and corresponding simulation value as y-Value.
+
+![Simulation Predicted vs Observed Chart.](https://user-images.githubusercontent.com/37107428/199510933-d4f46edd-8412-425f-93f6-0617d3c46257.png)
+
+
+**Adding Deviation Lines to the plot**
+
+In a Predicted vs. Observed plot the user can right click on the chart and add deviation lines:
+
+![AddDeviationLines](https://user-images.githubusercontent.com/37107428/199511249-4a7b78b9-5af0-440f-b699-9ef49f13b143.png)
+
+
+This opens a dialog that lets the user specify the fold value of the deviation curves.
+
+![DeviationLineDialog](https://user-images.githubusercontent.com/37107428/199511284-9e9eef4c-2620-48f4-bc52-a62cadd582d0.png)
+
+This will create two deviation lines according to the given x-fold value which has to be greater or equal to 1.  For a fold value equal to 1, the created lines would both be equal to the identity line. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
+
+![TwoFoldDeviationLine](https://user-images.githubusercontent.com/37107428/199511403-359e559b-36ab-44a2-b061-dc3f1d738118.png)
+
+#### Residuals vs. Time
+
+This chart is similar to the Time Profile chart, but on the y-axis the (absolute) residuals used in the optimization are plotted. The chart includes scaling, weights and LLOQ usage and the values are dimensionless, so you can assess the actual influence of the observed data.
+
+![Simulation Residuals vs Time Chart.](https://user-images.githubusercontent.com/37107428/199511037-f3035d88-f318-4f01-9ad1-5b190e11093d.png)
+
+At the top of the chart, the total residual error is being displayed.
+
 
 ### OSP Platform qualification library and PBPK Models Library
 #### PBPK Models library extended
