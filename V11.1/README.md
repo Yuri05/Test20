@@ -20,15 +20,15 @@ With the new release, population simulations contain new features for PK-analyse
 
 Individual simulations prior to v11 update 1 have had a 'global' PK calculation done using venous blood curve.
 
-<img src="images/individual_global_pk_analysis.png" alt="" data-size="line">
+![individual_global_pk_analysis](https://user-images.githubusercontent.com/261477/199485072-7deb3d45-8dc0-441f-ab86-c6b57df12afa.png)
 
 This type of analysis was not prevsiously available for population simulations. The global pk parameters for population simulation will show in a similar location to the individual simulation, with the caption indicating how the values are aggregated. They are calculated for all individuals in the population and the displayed value is the median of the population values.
 
-<img src="images/population_global_pk_analysis.png" alt="" data-size="line">
+![population_global_pk_analysis](https://user-images.githubusercontent.com/261477/199485142-f86b44b0-20a6-44f5-8558-87820f2fcd26.png)
 
 These newly availabe PK-parameters can also be used in the creation of other types of analysis. For example scatter analysis or box plot.
 
-<img src="images/global_pk_parameters_for_analyses.png" alt="" data-size="line">
+![global_pk_parameters_for_analyses](https://user-images.githubusercontent.com/261477/199485206-9bdf33f4-1d97-4380-9268-b493894ff1cd.png)
 
 #### PK-parameters for range selections
 
@@ -36,11 +36,11 @@ Now when you select a range analysis for your time profile (eg. 5%-95%), Pk-para
 
 Selecting Mean, and Range 5% to 95% as an example:
 
-<img src="images/range_selection_for_time_profile.png" alt="" data-size="line">
+![range_selection_for_time_profile](https://user-images.githubusercontent.com/261477/199485266-89d5af3d-0716-4563-bf0a-99b95873414d.png)
 
 Generates PK-parameters for Mean, 5%, and 95% for each compound.
 
-<img src="images/pk_values_calculated_for_individual_curves_at_range_extremes.png" alt="" data-size="line">
+![pk_values_calculated_for_individual_curves_at_range_extremes](https://user-images.githubusercontent.com/261477/199485316-dd237bb1-f8d4-4f00-8df9-1bc9fad5f9d0.png)
 
 #### PK-Parameter Aggregation 
 Also apparent from the screenshot is that there are tabs which display Pk-Parameters aggregated in different ways.
@@ -49,7 +49,7 @@ In the tab shown above, the tab 'Aggregated PK Values' is calculated from the an
 
 Compared to the tab shown below, 'Individual PK Values' where PK Values are calculated for the individuals and then the median is shown.
 
-<img src="images/individual_pk_values.png" alt="" data-size="line">
+![individual_pk_values](https://user-images.githubusercontent.com/261477/199485365-0da788b2-072b-4d6e-a551-e088442d896e.png)
 
 ####  Observed Data grouping in PK-Sim simulation figures
 
