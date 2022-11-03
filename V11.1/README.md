@@ -133,6 +133,10 @@ This chart is similar to the Time Profile chart, but on the y-axis the (absolute
 
 At the top of the chart, the total residual error is being displayed.
 
+#### Running multiple Parameter Identifications in parallel in PK-Sim
+
+It is now enabled to run multiple Parameter Identifications in parallel. After starting at least one PI, the tab “Run & Analyze” should reflect the state of the currently selected PI, instad of being equal for all PI instances as it was till now.
+When the user explicitly starts a simulation, the simulation has the highest priority to be run as soon as a thread is available 
 
 ### OSP Platform qualification library and PBPK Models Library
 #### PBPK Models library extended
