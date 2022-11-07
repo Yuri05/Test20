@@ -83,13 +83,13 @@ This type of analysis was not previously available for population simulations. T
 
 ![population_global_pk_analysis](https://user-images.githubusercontent.com/261477/199485142-f86b44b0-20a6-44f5-8558-87820f2fcd26.png)
 
-These newly availabe PK-parameters can also be used in the creation of other types of analysis. For example scatter analysis or box plot.
+These newly available PK-parameters can also be used in the creation of other types of analysis. For example scatter analysis or box plot.
 
 ![global_pk_parameters_for_analyses](https://user-images.githubusercontent.com/261477/199485206-9bdf33f4-1d97-4380-9268-b493894ff1cd.png)
 
 #### PK-parameters for range selections
 
-Now when you select a range analysis for your time profile (eg. 5%-95%), Pk-parameters will be calculated for the upper and lower range.
+Now when you select a range analysis for your time profile (e.g. 5%-95%), Pk-parameters will be calculated for the upper and lower range.
 
 Selecting Mean, and Range 5% to 95% as an example:
 
@@ -140,7 +140,7 @@ Selecting this option opens a new dialog that lists the common options of the cu
 
 ###  Grouping of results in the Chart Editor
 
-In the result charts of Simulations and Parameter Identifications (Time Profile, Predicted vs. Observed, Residuals vs. Time) the curves in the Chart Editor are grouped according to their Category. Additionally the checkbox "Link Data to Simulations has been added". When activated, (un)selecting a simulation curve will also unselected the mapped observed data.
+In the result charts of Simulations and Parameter Identifications (Time Profile, Predicted vs. Observed, Residuals vs. Time) the curves in the Chart Editor are grouped according to their Category. Additionally the checkbox "Link Data to Simulations has been added". When activated, (un)selecting a simulation curve will also unselect the mapped observed data.
 
 ![link_data_to_simulations](https://user-images.githubusercontent.com/37107428/199510440-9002d77d-7387-4516-90b3-8f9cbe050ba9.png)
 
