@@ -34,25 +34,28 @@ For each mapping, the scaling can be defined as **Linear** or **Log** which dete
   </tr>
 </table>
 
-To reflect the quality or importance of the observed data set or to balance different magnitudes of values in case of the linear scaling, you can edit the weights of each mapping.
+To reflect the quality or importance of the observed data set, you can edit the weights of each mapping.
 
 ### Predicted vs. Observed Chart in Simulations
 
-For each observed value a point is plotted with observed value as x-Value and corresponding simulation value as y-Value.
+For each observed value a point is plotted with observed value as x-Value and corresponding simulated value as y-Value.
 
-![Simulation Predicted vs Observed Chart.](https://user-images.githubusercontent.com/37107428/199510933-d4f46edd-8412-425f-93f6-0617d3c46257.png)
+![SimulationPredictedVsObservedChart](https://user-images.githubusercontent.com/25061876/200373885-138084ff-974a-4a08-99ab-eb8b4e97d8fd.png)
 
 
 **Adding Deviation Lines to the chart**
 
-In a Predicted vs. Observed plot the user can right click on the chart and add deviation lines:
+In a *Predicted vs. Observed* plot the user can right click on the chart and add deviation lines:
 
-![AddDeviationLines](https://user-images.githubusercontent.com/37107428/199511249-4a7b78b9-5af0-440f-b699-9ef49f13b143.png)
+<p align="center">
+  <img width="500" src="https://user-images.githubusercontent.com/37107428/199511249-4a7b78b9-5af0-440f-b699-9ef49f13b143.png">
+</p>
 
+This opens a dialog where the user can specify the fold value of the deviation curves.
 
-This opens a dialog that lets the user specify the fold value of the deviation curves.
-
-![DeviationLineDialog](https://user-images.githubusercontent.com/37107428/199511284-9e9eef4c-2620-48f4-bc52-a62cadd582d0.png)
+<p align="center">
+  <img width="600" src="https://user-images.githubusercontent.com/25061876/200374364-eb123065-18f3-4fda-96a2-01baffc4998a.png">
+</p>
 
 This will create two deviation lines according to the given x-fold value which has to be greater than 1. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
 
