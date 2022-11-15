@@ -64,7 +64,7 @@ This will create two deviation lines according to the given x-fold value which h
 ### Residuals vs. Time Chart in Simulations
 
 This chart is similar to the Time Profile chart, but on the y-axis the (absolute) residuals are plotted. The chart includes scaling and weights.
-**TODO Replace screenshot (residual units)**
+
 ![SimulationResidualsVSTimeChart](https://user-images.githubusercontent.com/25061876/200377883-348c5442-3a0a-45f5-9b7c-cb7e566da438.png)
 
 ### PK-Parameters in Population Simulations
@@ -108,7 +108,7 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
 
 ![individual_pk_values](https://user-images.githubusercontent.com/261477/199485365-0da788b2-072b-4d6e-a551-e088442d896e.png)
 
-###  Observed Data grouping in PK-Sim simulation charts
+###  Observed Data grouping in simulation charts (PK-Sim and MoBi)
 
 When adding observed data sets to a chart via drag-and-drop of a folder (or multiple folders), all data sets within one folder can be assigned to a single color. This behavior is optional and can be changed by (un)selecting the checkbox "Color group when adding to chart" in the context menu of the “Observed Data” entry of the building blocks explorer. This setting is a central configuration and valid for all subfolders. 
 
@@ -144,7 +144,7 @@ In the result charts of Simulations and Parameter Identifications (Time Profile,
 
 ![link_data_to_simulations](https://user-images.githubusercontent.com/37107428/199510440-9002d77d-7387-4516-90b3-8f9cbe050ba9.png)
 
-### Running multiple Parameter Identifications in parallel in PK-Sim
+### Running multiple Parameter Identifications in parallel in PK-Sim and MoBi
 
 It is now possible to run multiple Parameter Identifications in parallel. After starting at least one PI, the ribbon bar “Run & Analyze” should reflect the state of the currently selected PI, instead of being equal for all PI instances as it was till now.
 
