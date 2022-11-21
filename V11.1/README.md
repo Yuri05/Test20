@@ -174,16 +174,51 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 ## Fixed issues and Improvements
 
 ### PK-Sim
-* [...](https://github.com/Open-Systems-Pharmacology/...)
-* ...
+* [Initial concentration overwritten with a value in Protein Expression BB not propagated into simulation](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2253)
+* [Snaphot including individual with user-defined initial concentrations for protein expression cannot be reloaded](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2256)
+* [Expression profile building block shows "0" for all initial concentrations](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2241)
+* [Curve selection view (Define settings and run) - buttons are hidden in 4k, scaling 200%](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2252)
+* [UI: Parameter disappears when trying to edit another parameter](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2285)
+* [UI: Parameter disappears during creation of a simulation](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2287)
+* [UI: Ontogeny data window - x axis missing in 4K, 200% scaling](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2274)
+* [Add version to splash screen](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2263)
+* [UI: Creating population - "Stop" button too small](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2278)
+* [When overwriting initial protein concentration in Expression Profile: Reset button is active in Individual with no effect](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2270)
+* [Refresh problem with protein initial concentrations when updating individual from building block](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2254)
+* [OCT1 Influx expression profile populates on apical side of liver rather than basolateral](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2302)
+* [PK-Paramter normalized not calculated for statistical curves of a population analysis](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/414)
+* [Export time profile analysis change the units](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1640)
 
 ### MoBi
-* [...](https://github.com/Open-Systems-Pharmacology/...)
-* ...
+* [Wrong icon for events tab](https://github.com/Open-Systems-Pharmacology/MoBi/issues/731)
+* [Layout problems in MSV-BB](https://github.com/Open-Systems-Pharmacology/MoBi/issues/725)
+* [Mobi 11 returned error while trying to create a new PKSIM molecule.](https://github.com/Open-Systems-Pharmacology/MoBi/issues/726)
+* [Inconsistent size of buttons in "Rename" window](https://github.com/Open-Systems-Pharmacology/MoBi/issues/728)
+* [UI: Passive transports -> "Add molecule" button is too small](https://github.com/Open-Systems-Pharmacology/MoBi/issues/743)
+* [UI: "local reference point" is hidden](https://github.com/Open-Systems-Pharmacology/MoBi/issues/741)
+* [UI: formula editor - missing "x" in aliases field](https://github.com/Open-Systems-Pharmacology/MoBi/issues/750)
+* [UI: Reaction -> Stochiometry -> Empty column](https://github.com/Open-Systems-Pharmacology/MoBi/issues/742)
+* [UI: unnecessary scroll bars in explorers](https://github.com/Open-Systems-Pharmacology/MoBi/issues/739)
+* [Parameter added to an inhibition/induction process should be GLOBAL](https://github.com/Open-Systems-Pharmacology/MoBi/issues/769)
+* [Comparison does not include container criteria for parameter](https://github.com/Open-Systems-Pharmacology/MoBi/issues/751)
+* [UI: text boxes cut-off in parameter menu](https://github.com/Open-Systems-Pharmacology/MoBi/issues/757)
+* [NaNs in boolean formulas](https://github.com/Open-Systems-Pharmacology/OSPSuite.SimModel/issues/148)
 
 ### PK-Sim and MoBi
-* [...](https://github.com/Open-Systems-Pharmacology/...)
-* ...
+* [Chart Editor panel automatically resizes and hides plots after every simulation run](https://github.com/Open-Systems-Pharmacology/MoBi/issues/732)
+* [Add "g/l" to "Concentration (mass)"](https://github.com/Open-Systems-Pharmacology/OSPSuite.Dimensions/issues/32)
+* [UI: sensitivity analysis - "Update multiple sensitivity parameters" field is not readable.](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1689)
+* [UI: Parameter Identification feedback](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1687)
+* [SensitivityAnalysis does not produce any results in certain cases](https://github.com/Open-Systems-Pharmacology/OSPSuite.SimModel/issues/146)
+* [Calculate AUC_tEnd and C_tEnd for multiple administration simulations](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1693)
+* [Show a warning message when number of output points is high](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1636)
+
+## Known Issues
+
+### PK-Sim
+* [**Predicted vs. Observed** and **Residuals vs. Time** plots in a simulation are not saved to snapshot](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2404)
+* [**Predicted vs Observed** Plot: it is not possible to plot the data in the different dimensions](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2398)
+* [**Predicted vs. Observed** and **Residuals vs. Time** plots: some graphical settings are lost if the plot was cloned](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2394)
 
 ## Notes 
 * ...
