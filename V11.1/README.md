@@ -58,14 +58,14 @@ This opens a dialog where the user can specify the fold value of the deviation c
 </p>
 
 This will create two deviation lines according to the given x-fold value which has to be greater than 1. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
-**TODO Replace screenshot**
-![TwoFoldDeviationLine](https://user-images.githubusercontent.com/37107428/199511403-359e559b-36ab-44a2-b061-dc3f1d738118.png)
+
+![](https://user-images.githubusercontent.com/25061876/203110346-ae24c6cc-97f0-4809-b946-3b3eab969983.png)
 
 ### Residuals vs. Time Chart in Simulations
 
 This chart is similar to the Time Profile chart, but on the y-axis the (absolute) residuals are plotted. The chart includes scaling and weights.
 
-![SimulationResidualsVSTimeChart](https://user-images.githubusercontent.com/25061876/200377883-348c5442-3a0a-45f5-9b7c-cb7e566da438.png)
+![SimulationResidualsVSTimeChart](https://user-images.githubusercontent.com/25061876/203111220-3c543f94-e2a6-4eb9-92b2-741e4960542d.png)
 
 ### PK-Parameters in Population Simulations
 
@@ -76,16 +76,22 @@ With the new release, population simulations contain new features for PK-analyse
 #### Global PK Analysis
 
 Individual simulations prior to v11 update 1 have had a 'global' PK calculation done using venous blood curve.
-**TODO Replace screenshot**
-![individual_global_pk_analysis](https://user-images.githubusercontent.com/261477/199485072-7deb3d45-8dc0-441f-ab86-c6b57df12afa.png)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203112086-fdf8c291-5f92-4143-a89f-1fdb7bcf8444.png">
+</p>
 
 This type of analysis was not previously available for population simulations. The global pk parameters for population simulation will show in a similar location to the individual simulation, with the caption indicating how the values are aggregated. They are calculated for all individuals in the population and the displayed value is the median of the individual values.
 
-![population_global_pk_analysis](https://user-images.githubusercontent.com/261477/199485142-f86b44b0-20a6-44f5-8558-87820f2fcd26.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203113506-7be67360-b8eb-42e4-9f7c-4779c0a9720e.png">
+</p>
 
 These newly available PK-parameters can also be used in the creation of other types of analysis. For example scatter analysis or box plot.
 
-![global_pk_parameters_for_analyses](https://user-images.githubusercontent.com/261477/199485206-9bdf33f4-1d97-4380-9268-b493894ff1cd.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485206-9bdf33f4-1d97-4380-9268-b493894ff1cd.png">
+</p>
 
 #### PK-parameters for range selections
 
@@ -112,11 +118,15 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
 
 When adding observed data sets to a chart via drag-and-drop of a folder (or multiple folders), all data sets within one folder can be assigned to a single color. This behavior is optional and can be changed by (un)selecting the checkbox "Color group when adding to chart" in the context menu of the “Observed Data” entry of the building blocks explorer. This setting is a central configuration and valid for all subfolders. 
 
-![color_grouping_context_menu](https://user-images.githubusercontent.com/261477/199485722-2ca9ca3f-b631-459e-b2b8-61343de0def9.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203114770-a6abe014-6a59-4af7-a61a-62cd60b09ae1.png">
+</p>
 
 Alternatively this feature can be toggled on and off from the User Settings, under “Utilities” -> “Options” -> “General” -> “Colors”:
 
-![color_grouping_in_settings](https://user-images.githubusercontent.com/261477/199485758-9bf1b2e8-3c7e-4889-a9db-694d43951d4a.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485758-9bf1b2e8-3c7e-4889-a9db-694d43951d4a.png">
+</p>
 
 When this option is selected and whole folders are dragged and dropped into a plot, the observed data from the same folders will be assigned the same color. However, when the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one will be assigned a new color, and they should not be grouped according to the folder they belong to. 
 
@@ -124,19 +134,23 @@ When this option is selected and whole folders are dragged and dropped into a pl
 
 A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the lines will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the curves in the chart according to the selection, and then the selection is cleared. The user can then choose a new selection of metadata and change the coloring once again.
 
-![color_grouping_tab](https://user-images.githubusercontent.com/261477/199485799-18d35175-b8d4-4591-be7f-ef07af677af3.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485799-18d35175-b8d4-4591-be7f-ef07af677af3.png">
+</p>
 
 ###  Editing options of multiple curves
 
 In the “Curves and Axis Options” Tab of the Chart Editor a new context menu item has been added called “Edit options for selected”. It is only visible when the user has selected at least two rows.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/261477/199485828-64dbb0a3-9afa-4712-8d15-ee03c4a562ea.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203116288-85233c3c-109a-4e84-8a4e-b767d227a583.png">
 </p>
 
 Selecting this option opens a new dialog that lists the common options of the curves. Initially the values for the options are not set, and if the user lets any of the options to that initial state, that option will not be edited – meaning that the selected curves will retain for that option the value they had before opening the dialog.
 
-![edit_options_dialog](https://user-images.githubusercontent.com/261477/199485858-15ebdfd1-e7ed-4f0b-90e7-ede3e2994e4c.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203116525-dc48bea7-44f8-48c0-8787-b03c2c2d842d.png">
+</p>
 
 ###  Grouping of results in the Chart Editor
 
