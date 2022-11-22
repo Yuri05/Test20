@@ -15,7 +15,7 @@
 In individual simulations, the newly introduced **Observed Data** tab can be used to map observed data sets to the corresponding simulation outputs. 
 This mapping is required for some of the new features described below (e.g. for displaying goodness of fit, etc.).
 
-All observed data sets belonging  to the opened simulation are listed in the mapping table. When adding or removing an observed data set to/from the simulation, the table is updated. Newly added observed data sets are automatically mapped to simulation outputs according to `Organ`, `Compartment` and `Molecule` meta data of the data set and path elements of the outputs. If no matching output can be found, the mapped simulation output is set to **None**. This means that the specified observed data set is not mapped.The user can also clear an output mapping by selecting the **None** entry from the Output dropdown. By clicking the **"x"** on the right side of the grid, the user can delete the observed data from the simulation.
+All observed data sets belonging  to the opened simulation are listed in the mapping table. When adding or removing an observed data set to/from the simulation, the table is updated. Newly added observed data sets are automatically mapped to simulation outputs according to `Organ`, `Compartment` and `Molecule` meta data of the data set and path elements of the outputs. If no matching output can be found, the mapped simulation output is set to **None**. This means that the specified observed data set is not mapped. The user can also clear an output mapping by selecting the **None** entry from the Output dropdown. By clicking the **"x"** on the right side of the grid, the user can delete the observed data from the simulation.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/25061876/200050125-418222fd-9bca-4bbc-84c3-ef899b3ddc62.png">
@@ -205,7 +205,7 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 
 ### PK-Sim
 * [Initial concentration overwritten with a value in Protein Expression BB not propagated into simulation](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2253)
-* [Snaphot including individual with user-defined initial concentrations for protein expression cannot be reloaded](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2256)
+* [Snapshot including individual with user-defined initial concentrations for protein expression cannot be reloaded](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2256)
 * [Expression profile building block shows "0" for all initial concentrations](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2241)
 * [Curve selection view (Define settings and run) - buttons are hidden in 4k, scaling 200%](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2252)
 * [UI: Parameter disappears when trying to edit another parameter](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2285)
@@ -216,7 +216,7 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * [When overwriting initial protein concentration in Expression Profile: Reset button is active in Individual with no effect](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2270)
 * [Refresh problem with protein initial concentrations when updating individual from building block](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2254)
 * [OCT1 Influx expression profile populates on apical side of liver rather than basolateral](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2302)
-* [PK-Paramter normalized not calculated for statistical curves of a population analysis](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/414)
+* [PK-Parameter normalized not calculated for statistical curves of a population analysis](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/414)
 * [Export time profile analysis change the units](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/1640)
 
 ### MoBi
@@ -227,7 +227,7 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * [UI: Passive transports -> "Add molecule" button is too small](https://github.com/Open-Systems-Pharmacology/MoBi/issues/743)
 * [UI: "local reference point" is hidden](https://github.com/Open-Systems-Pharmacology/MoBi/issues/741)
 * [UI: formula editor - missing "x" in aliases field](https://github.com/Open-Systems-Pharmacology/MoBi/issues/750)
-* [UI: Reaction -> Stochiometry -> Empty column](https://github.com/Open-Systems-Pharmacology/MoBi/issues/742)
+* [UI: Reaction -> Stoichiometry -> Empty column](https://github.com/Open-Systems-Pharmacology/MoBi/issues/742)
 * [UI: unnecessary scroll bars in explorers](https://github.com/Open-Systems-Pharmacology/MoBi/issues/739)
 * [Parameter added to an inhibition/induction process should be GLOBAL](https://github.com/Open-Systems-Pharmacology/MoBi/issues/769)
 * [Comparison does not include container criteria for parameter](https://github.com/Open-Systems-Pharmacology/MoBi/issues/751)
