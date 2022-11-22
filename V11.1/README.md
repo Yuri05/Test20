@@ -17,7 +17,9 @@ This mapping is required for some of the new features described below (e.g. for 
 
 All observed data sets belonging  to the opened simulation are listed in the mapping table. When adding or removing an observed data set to/from the simulation, the table is updated. Newly added observed data sets are automatically mapped to simulation outputs according to `Organ`, `Compartment` and `Molecule` meta data of the data set and path elements of the outputs. If no matching output can be found, the mapped simulation output is set to **None**. This means that the specified observed data set is not mapped.The user can also clear an output mapping by selecting the **None** entry from the Output dropdown. By clicking the **"x"** on the right side of the grid, the user can delete the observed data from the simulation.
 
-![SimulationOutputMappings](https://user-images.githubusercontent.com/25061876/200050125-418222fd-9bca-4bbc-84c3-ef899b3ddc62.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/200050125-418222fd-9bca-4bbc-84c3-ef899b3ddc62.png">
+</p>
 
 For each mapping, the scaling can be defined as **Linear** or **Log** which determines the residual calculation.
 
@@ -40,7 +42,9 @@ To reflect the quality or importance of the observed data set, you can edit the 
 
 For each observed value a point is plotted with observed value as x-Value and corresponding simulated value as y-Value.
 
-![SimulationPredictedVsObservedChart](https://user-images.githubusercontent.com/25061876/200373885-138084ff-974a-4a08-99ab-eb8b4e97d8fd.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/200373885-138084ff-974a-4a08-99ab-eb8b4e97d8fd.png">
+</p>
 
 
 **Adding Deviation Lines to the chart**
@@ -59,13 +63,17 @@ This opens a dialog where the user can specify the fold value of the deviation c
 
 This will create two deviation lines according to the given x-fold value which has to be greater than 1. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
 
-![](https://user-images.githubusercontent.com/25061876/203110346-ae24c6cc-97f0-4809-b946-3b3eab969983.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203110346-ae24c6cc-97f0-4809-b946-3b3eab969983.png">
+</p>
 
 ### Residuals vs. Time Chart in Simulations
 
 This chart is similar to the Time Profile chart, but on the y-axis the (absolute) residuals are plotted. The chart includes scaling and weights.
 
-![SimulationResidualsVSTimeChart](https://user-images.githubusercontent.com/25061876/203111220-3c543f94-e2a6-4eb9-92b2-741e4960542d.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/25061876/203111220-3c543f94-e2a6-4eb9-92b2-741e4960542d.png">
+</p>
 
 ### PK-Parameters in Population Simulations
 
@@ -99,11 +107,15 @@ Now when you select a range analysis for your time profile (e.g. 5%-95%), Pk-par
 
 Selecting Mean, and Range 5% to 95% as an example:
 
-![range_selection_for_time_profile](https://user-images.githubusercontent.com/261477/199485266-89d5af3d-0716-4563-bf0a-99b95873414d.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485266-89d5af3d-0716-4563-bf0a-99b95873414d.png">
+</p>
 
 Generates PK-parameters for Mean, 5%, and 95% for each compound.
 
-![pk_values_calculated_for_individual_curves_at_range_extremes](https://user-images.githubusercontent.com/261477/199485316-dd237bb1-f8d4-4f00-8df9-1bc9fad5f9d0.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485316-dd237bb1-f8d4-4f00-8df9-1bc9fad5f9d0.png">
+</p>
 
 #### PK-Parameter Aggregation 
 Also apparent from the screenshot is that there are tabs which display Pk-Parameters aggregated in different ways.
@@ -112,7 +124,9 @@ In the tab shown above, 'Aggregated PK Values', PK Values are calculated **from 
 
 Compared to the tab shown below, 'Individual PK Values' where PK Values are calculated **for the individuals and then the median is shown.**
 
-![individual_pk_values](https://user-images.githubusercontent.com/261477/199485365-0da788b2-072b-4d6e-a551-e088442d896e.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/261477/199485365-0da788b2-072b-4d6e-a551-e088442d896e.png">
+</p>
 
 ###  Observed Data grouping in simulation charts (PK-Sim and MoBi)
 
@@ -156,7 +170,9 @@ Selecting this option opens a new dialog that lists the common options of the cu
 
 In the result charts of Simulations and Parameter Identifications (Time Profile, Predicted vs. Observed, Residuals vs. Time) the curves in the Chart Editor are grouped according to their Category. Additionally the checkbox "Link Data to Simulations has been added". When activated, (un)selecting a simulation curve will also unselect the mapped observed data.
 
-![link_data_to_simulations](https://user-images.githubusercontent.com/37107428/199510440-9002d77d-7387-4516-90b3-8f9cbe050ba9.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/37107428/199510440-9002d77d-7387-4516-90b3-8f9cbe050ba9.png">
+</p>
 
 ### Running multiple Parameter Identifications in parallel in PK-Sim and MoBi
 
@@ -235,4 +251,4 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * [**Predicted vs. Observed** and **Residuals vs. Time** plots: some graphical settings are lost if the plot was cloned](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2394)
 
 ## Notes 
-* ...
+* TODO CKD not experimental anymore
