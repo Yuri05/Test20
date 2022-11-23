@@ -69,6 +69,7 @@ This will create two deviation lines according to the given x-fold value which h
 ### Residuals vs. Time Chart in Simulations
 
 This chart is similar to the Time Profile chart, but on the y-axis the (absolute) residuals are plotted. The chart includes scaling and weights.
+At the top of the chart, the **total residual error** is displayed.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/25061876/203111220-3c543f94-e2a6-4eb9-92b2-741e4960542d.png">
@@ -129,7 +130,7 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
 
 ###  Color grouping tab in the Chart Editor 
 
-A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the lines will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the curves in the chart according to the selection, and then the selection is cleared. The user can then choose a new selection of metadata and change the coloring once again.
+A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the observed data sets will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the observed data sets in the chart according to the selection, and then the selection is cleared. The user can then choose a new selection of metadata and change the coloring once again.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/25061876/203570761-f9d8ea29-e3d9-4384-a852-8df81660d4e2.png">
