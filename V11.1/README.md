@@ -43,16 +43,15 @@ To reflect the quality or importance of the observed data set, you can edit the 
 For each observed value a point is plotted with observed value as x-Value and corresponding simulated value as y-Value.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/25061876/200373885-138084ff-974a-4a08-99ab-eb8b4e97d8fd.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203572036-3bbaecc0-af24-4e2d-b91e-4953dfb38b40.png">
 </p>
-
 
 **Adding Deviation Lines to the chart**
 
 In a *Predicted vs. Observed* plot the user can right click on the chart and add deviation lines:
 
 <p align="center">
-  <img width="500" src="https://user-images.githubusercontent.com/37107428/199511249-4a7b78b9-5af0-440f-b699-9ef49f13b143.png">
+  <img width="600" src="https://user-images.githubusercontent.com/25061876/203572315-a570dc0e-fed7-4686-a2de-0b7ce2833ef6.png">
 </p>
 
 This opens a dialog where the user can specify the fold value of the deviation curves.
@@ -133,7 +132,7 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
 A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the lines will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the curves in the chart according to the selection, and then the selection is cleared. The user can then choose a new selection of metadata and change the coloring once again.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/261477/199485799-18d35175-b8d4-4591-be7f-ef07af677af3.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203570761-f9d8ea29-e3d9-4384-a852-8df81660d4e2.png">
 </p>
 
 ###  Editing options of multiple curves
@@ -147,7 +146,7 @@ In the “Curves and Axis Options” Tab of the Chart Editor a new context menu 
 Selecting this option opens a new dialog that lists the common options of the curves. Initially the values for the options are not set, and if the user lets any of the options to that initial state, that option will not be edited – meaning that the selected curves will retain for that option the value they had before opening the dialog.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/25061876/203116525-dc48bea7-44f8-48c0-8787-b03c2c2d842d.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203571279-377c5e01-3875-4d90-af67-2c7277138916.png">
 </p>
 
 ###  Grouping of results in the Chart Editor
