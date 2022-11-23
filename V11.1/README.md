@@ -43,7 +43,7 @@ To reflect the quality or importance of the observed data set, you can edit the 
 For each observed value a point is plotted with observed value as x-Value and corresponding simulated value as y-Value.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/25061876/203572036-3bbaecc0-af24-4e2d-b91e-4953dfb38b40.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203576087-fa622cf7-6270-4acb-8067-b3ff5ead29ea.png">
 </p>
 
 **Adding Deviation Lines to the chart**
@@ -51,7 +51,7 @@ For each observed value a point is plotted with observed value as x-Value and co
 In a *Predicted vs. Observed* plot the user can right click on the chart and add deviation lines:
 
 <p align="center">
-  <img width="600" src="https://user-images.githubusercontent.com/25061876/203572315-a570dc0e-fed7-4686-a2de-0b7ce2833ef6.png">
+  <img width="600" src="https://user-images.githubusercontent.com/25061876/203598210-6c318fc4-407c-4103-a30e-cdc06a9192cd.png">
 </p>
 
 This opens a dialog where the user can specify the fold value of the deviation curves.
@@ -63,7 +63,7 @@ This opens a dialog where the user can specify the fold value of the deviation c
 This will create two deviation lines according to the given x-fold value which has to be greater than 1. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/25061876/203110346-ae24c6cc-97f0-4809-b946-3b3eab969983.png">
+  <img src="https://user-images.githubusercontent.com/25061876/203598414-1f3d19de-cfab-4707-b4f9-18324b4f2a6d.png">
 </p>
 
 ### Residuals vs. Time Chart in Simulations
