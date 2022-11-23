@@ -128,22 +128,6 @@ Compared to the tab shown below, 'Individual PK Values' where PK Values are calc
   <img src="https://user-images.githubusercontent.com/261477/199485365-0da788b2-072b-4d6e-a551-e088442d896e.png">
 </p>
 
-###  Observed Data grouping in simulation charts (PK-Sim and MoBi)
-
-When adding observed data sets to a chart via drag-and-drop of a folder (or multiple folders), all data sets within one folder can be assigned to a single color. This behavior is optional and can be changed by (un)selecting the checkbox "Color group when adding to chart" in the context menu of the “Observed Data” entry of the building blocks explorer. This setting is a central configuration and valid for all subfolders. 
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/25061876/203114770-a6abe014-6a59-4af7-a61a-62cd60b09ae1.png">
-</p>
-
-Alternatively this feature can be toggled on and off from the User Settings, under “Utilities” -> “Options” -> “General” -> “Colors”:
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/261477/199485758-9bf1b2e8-3c7e-4889-a9db-694d43951d4a.png">
-</p>
-
-When this option is selected and whole folders are dragged and dropped into a plot, the observed data from the same folders will be assigned the same color. However, when the user selects individual observed data sets instead of folders and drags and drops them on the plot, then each one will be assigned a new color, and they should not be grouped according to the folder they belong to. 
-
 ###  Color grouping tab in the Chart Editor 
 
 A new tab called "Curves Color Grouping" has been introduced to the plots with observed data curves. In the tab the user can select one or more metadata, according to which the lines will be grouped and given the same color. Clicking the “Apply Color Grouping” button changes the color of the curves in the chart according to the selection, and then the selection is cleared. The user can then choose a new selection of metadata and change the coloring once again.
