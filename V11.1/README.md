@@ -235,4 +235,5 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * [**Predicted vs. Observed** and **Residuals vs. Time** plots: some graphical settings are lost if the plot was cloned](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2394)
 
 ## Notes 
-* TODO CKD not experimental anymore
+* **TODO final report location** Validation of the CKD (Chronic Kidney Disease) population was completed and the "experimental" flag was removed.
+The preliminary validation report can be viewed [here](https://github.com/Open-Systems-Pharmacology/Qualification-CKD/blob/main/Qualification/report/report.md). 
