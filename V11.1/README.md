@@ -1,16 +1,18 @@
 # Downloads:
 
-- [Full setup **TODO**](TODO)
+- [Full setup TODO](TODO) 
+(**MD5-Hash**: `TODO` ; **SHA256-Hash**: `TODO` )
 
-- [**ospsuite** R package **TODO**](TODO)
+- [**ospsuite** R package TODO](TODO)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
+
 
 # Release Notes for the Open Systems Pharmacology Software Suite 11 Update 1
 
 ## New features
 
-### Mapping observed data sets to simulation outputs in individual simulations
+### Mapping observed data sets to simulation outputs in individual simulations <sup>(*)</sup>
 
 In simulations, the newly introduced **Observed Data** tab can be used to map observed data sets to the corresponding simulation outputs. 
 This mapping is required for some of the new features described below (e.g. for displaying goodness of fit, etc.).
@@ -57,7 +59,7 @@ In a *Predicted vs. Observed* plot the user can right click on the chart and add
 This opens a dialog where the user can specify the fold value of the deviation curves.
 
 <p align="center">
-  <img width="600" src="https://user-images.githubusercontent.com/25061876/200374364-eb123065-18f3-4fda-96a2-01baffc4998a.png">
+  <img width="600" src="https://user-images.githubusercontent.com/25061876/204512978-4bcc1440-d9cd-4aad-9ee4-85827f1e52b0.png">
 </p>
 
 This will create two deviation lines according to the given x-fold value which has to be greater than 1. An x-fold deviation range includes simulated values within x-fold and 1/x-fold of observed values.
@@ -165,25 +167,26 @@ It is now possible to run multiple Parameter Identifications in parallel. After 
 ### OSP Platform qualification library and PBPK Models Library
 #### PBPK Models library extended
 New PBPK models added:
+* Carbamazepine
 * Felodipine
 * Sildenafil
 
 Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
 #### New releases of OSP Platform qualification library and PBPK Models Library
-**TODO**
-As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite and the latest version of the [_OSP Qualification Framework_](https://github.com/Open-Systems-Pharmacology/QualificationPlan/releases/latest):
+
+As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite:
 * [**_OSP Qualification Reports library_**](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports) 
 * [**_OSP-PBPK-Model-Library_**](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library)
 
 ### New release of the **ospsuite** R package
 
-* ...
+* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/latest)
+* Documentation: s. [here](https://www.open-systems-pharmacology.org/OSPSuite-R/)
 
-### (Re-)Qualification framework updated
-OSP (Re-)Qualification framework is a technical framework to assess the confidence of specific intended use of the OSP platform. This framework allows for an automatic (re)-qualification workflow of the OSP suite. New release of the OSP (Re-)Qualification framework provides some improvements and bugfixes (s. below).
+### New release of the **tlf** R package
 
-* (Re-)Qualification framework is not part of the OSP Suite setup (is only required for the creation of qualification reports) and must be installed separately. The latest release can be found [here](https://github.com/Open-Systems-Pharmacology/QualificationPlan/releases/latest)
-* Full documentation of the (Re-)Qualification framework can be found [here](https://docs.open-systems-pharmacology.org/shared-tools-and-example-workflows/qualification)
+* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/latest)
+* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library/)
 
 ## Fixed issues and Improvements
 
@@ -235,5 +238,6 @@ OSP (Re-)Qualification framework is a technical framework to assess the confiden
 * [**Predicted vs. Observed** and **Residuals vs. Time** plots: some graphical settings are lost if the plot was cloned](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/2394)
 
 ## Notes 
-* **TODO final report location** Validation of the CKD (Chronic Kidney Disease) population was completed and the "experimental" flag was removed.
+* Validation of the CKD (Chronic Kidney Disease) population was completed and the "experimental" flag was removed.
 The preliminary validation report can be viewed [here](https://github.com/Open-Systems-Pharmacology/Qualification-CKD/blob/main/Qualification/report/report.md). 
+* <sup>(*)</sup> Implementation of the features was sponsored by **Boehringer Ingelheim Pharma GmbH & Co. KG**
