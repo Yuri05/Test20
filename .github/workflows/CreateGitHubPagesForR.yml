@@ -5,10 +5,7 @@ on:
     inputs:
       pkgdown_mode:
         required: true
-        type: choice
-        options:
-          - devel
-          - release
+        type: string
       extra_r_packages:
         required: false
         type: string
