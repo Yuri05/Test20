@@ -5,8 +5,10 @@ on:
     inputs:
       pkgdown_mode:
         required: true
-        type: string
-        enum: ['devel', 'release']
+        type: choice
+        options:
+          - devel
+          - release
       extra_r_packages:
         required: false
         type: string
