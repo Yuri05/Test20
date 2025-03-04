@@ -1,6 +1,6 @@
 name: Conditional Workflow
 
-on: workflow_dispatch
+on: push
 
 env:
   cutoff: 10
