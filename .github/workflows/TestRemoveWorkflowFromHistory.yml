@@ -18,7 +18,7 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     needs: job1
-    if: needs.job1.outputs.value > ${{ env.cutoff }}
+    if: ${{ fromJson(needs.job1.outputs.value) > env.cutoff }}
     steps:
       - name: Run if value is greater than ${{ env.cutoff }}
         run: echo "Value is greater than ${{ env.cutoff }}"
@@ -26,7 +26,7 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     needs: job2
-    if: ${{ needs.job1.outputs.value }} <= ${{ env.cutoff }}
+    if: ${{ fromJson(needs.job1.outputs.value) <= env.cutoff }}
     steps:
       - name: Delete Workflow Run
         env:
