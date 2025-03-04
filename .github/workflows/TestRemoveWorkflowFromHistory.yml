@@ -2,8 +2,8 @@ name: Conditional Workflow
 
 on: push
 
-permissions:
-  actions: write
+permissions: write-all
+#  actions: write
 
 jobs:
   job1:
