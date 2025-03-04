@@ -2,7 +2,7 @@ name: Conditional Workflow
 
 on: push 
 
-permissions: write-all
+permissions: write-all 
 #  actions: write
 
 jobs:
