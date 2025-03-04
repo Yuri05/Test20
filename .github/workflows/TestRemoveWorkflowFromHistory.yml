@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Delete workflow run
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl -L \
             -X DELETE \
