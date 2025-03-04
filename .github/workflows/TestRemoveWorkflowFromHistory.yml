@@ -24,8 +24,8 @@ jobs:
         run: echo "Value is greater than 10"
 
   cleanup-job:
-    needs: job2
-    if: always() && needs.second-job.result == 'skipped'
+    needs: job1
+    if: always() && needs.job1.outputs.value <= 10
     runs-on: ubuntu-latest
     steps:
       - name: Delete workflow run
