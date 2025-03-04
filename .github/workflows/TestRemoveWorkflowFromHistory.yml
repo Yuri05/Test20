@@ -2,9 +2,6 @@ name: Conditional Workflow
 
 on: push 
 
-#permissions:
-#  actions: write
-
 jobs:
   job1:
     runs-on: ubuntu-latest
@@ -25,7 +22,7 @@ jobs:
 
   cleanup-job:
     needs: job1
-    if: always() && needs.job1.outputs.value <= 10
+    if: needs.job1.outputs.value <= 10
     runs-on: ubuntu-latest
     steps:
       - name: Cancel workflow run
