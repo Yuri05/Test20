@@ -23,31 +23,8 @@ jobs:
       - name: Run if value is greater than 10
         run: echo "Value is greater than 10"
 
-  yaml
-
-name: Your Workflow
-
-jobs:
-  first-job:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run_second: ${{ steps.check.outputs.should_run }} # Example output
-    steps:
-      - id: check
-        run: |
-          # Your logic to determine if second job should run
-          echo "should_run=true" >> $GITHUB_OUTPUT # or false
-
-  second-job:
-    needs: first-job
-    if: needs.first-job.outputs.should_run_second == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Your second job steps
-        run: echo "Running second job"
-
   cleanup-job:
-    needs: second-job
+    needs: job2
     if: always() && needs.second-job.result == 'skipped'
     runs-on: ubuntu-latest
     steps:
