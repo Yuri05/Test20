@@ -26,7 +26,7 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     needs: job2
-    if: ${{ needs.job1.outputs.value <= ${{ env.cutoff }} }}
+    if: ${{ needs.job1.outputs.value <= env.cutoff }}
     steps:
       - name: Delete Workflow Run
         env:
