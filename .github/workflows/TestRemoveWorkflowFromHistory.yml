@@ -2,8 +2,8 @@ name: Conditional Workflow
 
 on: push 
 
-permissions:
-  actions: write
+#permissions:
+#  actions: write
 
 jobs:
   job1:
@@ -28,7 +28,7 @@ jobs:
     if: always() && needs.job1.outputs.value <= 10
     runs-on: ubuntu-latest
     steps:
-      - name: Delete workflow run
+      - name: Cancel workflow run
         run: |
           curl -L \
             -X POST \
