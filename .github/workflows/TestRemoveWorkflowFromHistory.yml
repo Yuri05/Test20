@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Set Value
         id: set-value
-        run: echo "::set-output name=value::11"  
+        run: echo "::set-output name=value::9"  
 
   job2:
     runs-on: ubuntu-latest
