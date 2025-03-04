@@ -29,9 +29,9 @@ jobs:
     if: ${{ needs.job1.outputs.value }} <= 10
     steps:
       - name: Delete Workflow Run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "run_id = ${{ github.run_id }}"
+          echo "repo = ${{ github.repository }}"
           curl -L \
            -X DELETE \
            -H "Accept: application/vnd.github+json" \
