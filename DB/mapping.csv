@@ -1,0 +1,71 @@
+﻿"CONTAINER","TISSUE"
+BloodCells,BLOOD
+Caecum,INTESTINE
+Duodenum,SMALL INTESTINE
+LowerIleum,SMALL INTESTINE
+LowerJejunum,SMALL INTESTINE
+Plasma,BLOOD
+UpperIleum,SMALL INTESTINE
+UpperJejunum,SMALL INTESTINE
+Bone,BONE
+Brain,BRAIN
+Fat,FAT
+Gonads,GONADS
+Heart,HEART
+Kidney,KIDNEY
+LargeIntestine,INTESTINE
+Lung,LUNG
+Muscle,MUSCLE
+Pancreas,PANCREAS
+Skin,SKIN
+SmallIntestine,SMALL INTESTINE
+Spleen,SPLEEN
+Stomach,STOMACH
+Bone,BONE MARROW
+Brain,FETAL BRAIN
+Lung,FETAL LUNG
+LowerIleum,INTESTINE
+LowerJejunum,INTESTINE
+UpperIleum,INTESTINE
+UpperJejunum,INTESTINE
+Duodenum,INTESTINE
+LargeIntestine,COLON
+Gonads,EPIDIDYMIS
+Gonads,OVARY
+Gonads,OVIDUCT
+Muscle,SKELETAL MUSCLE
+Gonads,TESTIS
+ColonAscendens,COLON
+ColonTransversum,COLON
+ColonDescendens,COLON
+ColonSigmoid,COLON
+Rectum,INTESTINE
+ColonAscendens,INTESTINE
+ColonTransversum,INTESTINE
+ColonDescendens,INTESTINE
+ColonSigmoid,INTESTINE
+SmallIntestine,INTESTINE
+Periportal,LIVER
+Periportal,FETAL LIVER
+Pericentral,LIVER
+Pericentral,FETAL LIVER
+Endometrium,UTERUS
+Myometrium,UTERUS
+Breasts,BREAST
+Breasts,MAMMARY GLAND
+Fetus,FETAL LIVER
+PlacentaMaternal,PLACENTA
+PlacentaFetal,PLACENTA
+,ADRENAL GLAND
+,BLADDER
+,CONNECTIVE TISSUE
+,MIXED
+,MOUTH
+,PITUTARY GLAND
+,PROSTATE
+,SALIVARY GLAND
+,SPINAL CORD
+,THYMUS
+,THYROID
+,TRACHEA
+,UNCHARACTERIZED TISSUE
