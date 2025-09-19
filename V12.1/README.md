@@ -88,9 +88,9 @@ TODO Screenshots
 Users can now save a neighborhood configuration to a PKML file and load it from PKML. This supports efficient reuse and sharing of neighborhood setups, streamlining workflows for complex modeling scenarios.
 
 
-## Calculation of sensitivity in PI should be interruptable
+### Calculation of sensitivity in PI should be interruptable
 <!-- **Issue:** [Calculation of sensitivity in PI should be interruptable](https://github.com/Open-Systems-Pharmacology/OSPSuite.SimModel/issues/175) -->
-> Sensitivity calculations in parameter identification (PI) can now be interrupted by the user, similar to regular simulation runs. This saves time and resources, allowing users to halt long or unneeded calculations without waiting for them to finish.
+Sensitivity calculations in parameter identification (PI) can now be interrupted by the user, similar to regular simulation runs. This saves time and resources, allowing users to halt long or unneeded calculations without waiting for them to finish.
 
 
 
