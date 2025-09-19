@@ -158,7 +158,3 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
-
-* [Crash in cloned Parameter Identification after project save/load](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2217)
-* [Data importer: error when "Reload under the same settings"](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2176)
-* [Simulations that error while running under sensitivity analysis do not show any error message](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1606)
