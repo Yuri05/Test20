@@ -38,7 +38,7 @@ In most cases these components are already installed on the target machine. In t
 6. If you are using the OSP Qualification Runner (as part of the OSP Qualification Framework) - the path to the portable PK-Sim folder must be passed as an argument, otherwise the installed version will be used.
 </details> 
 
-# Release Notes for the Open Systems Pharmacology Software Suite 12
+# Release Notes for the Open Systems Pharmacology Software Suite 12 Update 1
 
 ## New features
 <!--
