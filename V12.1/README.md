@@ -45,31 +45,53 @@ In most cases these components are already installed on the target machine. In t
 <sup>(*)</sup> Implementation of the features was sponsored by **XXX**
 -->
 
-### XXXXXX
+### MoBi: Trace back source of a quantity in simulation
+TODO Description <br>
+TODO Screenshots
+
+### MoBi: Spatial Structure with Individual selection for preview
+<!-- **Issue:** [Spatial Structure w/ Individual selection for preview](https://github.com/Open-Systems-Pharmacology/MoBi/issues/947) -->
+Adds a way to select a specific individual for preview in the spatial structure view. This feature allows users to visualize and apply individual-specific settings directly within the spatial structure, improving model personalization and analysis.
+
+TODO Screenshots
+
+### Concurrent execution of simulations
+TODO Description <br>
+TODO Screenshots
 
 
-### XXXXXX
+### Batch edit mode for charts
+<!-- **Issue:** [Batch edit mode for charts](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2536) -->
+When editing charts with many data points, each change triggers a chart update, causing significant delays. The new batch edit mode allows users to temporarily disable chart updates, make multiple changes to curves, and then update all at once. This speeds up the editing workflow for large datasets and ensures that users can work efficiently without waiting for each update.
+- The UI indicates when the chart is out-of-date due to batch editing.
+- Users can toggle this mode when editing curves or using the data browser.
+
+TODO Screenshots
 
 
-### XXXXXX
+### Exports chart to png
+<!-- **Issue:** [Feature: Export chart to png](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1801) -->
+A highly requested feature, this adds the ability to export any chart directly to a PNG file for use in presentations or publications. The implementation supports custom formatting and watermark settings, similar to the "copy to clipboard" function.
+
+TODO Screenshots
+
+### MoBi: Create Subfolders possible for modules
+<!-- **Issue:** [Feature wish: Create Subfolders possible for modules](https://github.com/Open-Systems-Pharmacology/MoBi/issues/527) -->
+Enables users to organize modules within building block sections by creating subfolders. 
+This feature is especially useful when working with multiple structural models, helping to keep the workspace tidy and navigable.
+
+TODO Screenshots
 
 
-### XXXXXX
+### Save/load neighborhood
+<!-- **Issue:** [Save/load neighborhood](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1318) -->
+Users can now save a neighborhood configuration to a PKML file and load it from PKML. This supports efficient reuse and sharing of neighborhood setups, streamlining workflows for complex modeling scenarios.
 
 
-### XXXXXX
+## Calculation of sensitivity in PI should be interruptable
+<!-- **Issue:** [Calculation of sensitivity in PI should be interruptable](https://github.com/Open-Systems-Pharmacology/OSPSuite.SimModel/issues/175) -->
+> Sensitivity calculations in parameter identification (PI) can now be interrupted by the user, similar to regular simulation runs. This saves time and resources, allowing users to halt long or unneeded calculations without waiting for them to finish.
 
-
-### XXXXXX
-
-
-### XXXXXX
-
-
-### XXXXXX
-
-
-### XXXXXX
 
 
 
@@ -128,15 +150,15 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 
 
 ### MoBi
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
-* [XXXXX](XXXXX)
+* [Expression profiles missing in MoBi unless individual is opened in PK-Sim](https://github.com/Open-Systems-Pharmacology/PK-Sim/issues/3145)
+* [Invalid paths in event assignments throws unhandled exception](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2461)
+* [Simulation view - show the "Parameters" tab by default instead of "Properties"](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1723)
+* [Typing container name not possible after choosing parent path](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1929)
+* [Copy path of a parameter/container in the simulation](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1639)
+* [Throw a warning message for non-existing neighbourhood](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2550)
+* [Export of comparison results fails](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2580)
+* [Add protein expression to Parameter Values does not always assign value](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2518)
+* ["Negative values allowed" check box behavior](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2091)
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
@@ -148,7 +170,7 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 
 
 ### PK-Sim and MoBi
-* [XXXXX](XXXXX)
+* [Observed data: Multiselect folders and "Group by"](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1797)
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
 * [XXXXX](XXXXX)
