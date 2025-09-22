@@ -6,7 +6,7 @@
   |-|-|
   |`TODO`|`TODO` |
 
-- [**ospsuite** R package TODO](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.2.0)
+- [**ospsuite** R package](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
   - Additional gene expression databases for human and animal species can be found [here](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/tag/v3.0.1). 
