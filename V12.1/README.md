@@ -124,8 +124,8 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 
 ### New release of the **tlf** R package
 
-* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/latest)
-* Documentation: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
+* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
+* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library)
 
 ## Fixed issues and Improvements
 
