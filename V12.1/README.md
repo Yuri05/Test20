@@ -119,13 +119,13 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 
 ### New release of the **ospsuite** R package
 
-* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/latest)
+* Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
 * Documentation: s. [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
 
 ### New release of the **tlf** R package
 
 * Installation and new features: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/latest)
-* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library)
+* Documentation: s. [here](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
 
 ## Fixed issues and Improvements
 
