@@ -4,7 +4,7 @@
 
   |**MD5-Hash**| **SHA256-Hash**|
   |-|-|
-  |`TODO`|`TODO` |
+  |`6ebe9782e99cd3df086c1bb9892589cd`|`33f877bc926c5c3fe2634183a51938039b91664a23c545d201b2a6b8f061a531` |
 
 - [**ospsuite** R package](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
 
