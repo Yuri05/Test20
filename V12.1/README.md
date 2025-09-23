@@ -98,21 +98,27 @@ When more than one simulation is running, the progress bar displays the number o
 
 <img width="187" height="53" alt="Progress bar showing multiple running simulations" src="https://github.com/user-attachments/assets/348c6ac2-8a3d-4a41-803a-87ce9ab5e090" />
 
-### PK-Sim and MoBi: Batch edit mode for charts
-<!-- **Issue:** [Batch edit mode for charts](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2536) -->
-When editing charts with many data points, each change triggers a chart update, causing significant delays. The new batch edit mode allows users to temporarily disable chart updates, make multiple changes to curves, and then update all at once. This speeds up the editing workflow for large datasets and ensures that users can work efficiently without waiting for each update.
-- The UI indicates when the chart is out-of-date due to batch editing.
-- Users can toggle this mode when editing curves or using the data browser.
+### PK-Sim and MoBi: Batch Edit Mode for Charts
 
-Example usage:
-- Step 1: disable chart auto-update in the chart editor
-  <img width="627" height="323" alt="grafik" src="https://github.com/user-attachments/assets/046af96a-3a1c-40fd-8f13-22b219c9e63f" />
+Editing charts with many data points or numerous curves could previously feel slow because every single modification (style change, axis setting, visibility toggle, etc.) triggered an immediate re-render. The new Batch Edit Mode lets you pause automatic chart updates, perform multiple edits, and then apply them all at once—greatly improving responsiveness for large datasets.
 
-- Step 2: modify the chart settings. After the first modification, the chart will be disabled with the hint
-  <img width="1236" height="771" alt="grafik" src="https://github.com/user-attachments/assets/62b5fde7-9ddc-4623-a442-c4d961657bb2" />
+#### Key Capabilities
+- Temporarily disables live chart re-drawing while you adjust multiple curves or settings.
+- Clear visual indication that the chart is out of date (so you don’t lose track).
+- One-click (re)activation applies all accumulated changes in a single re-render.
 
-- Step 3: enable the chart auto-update again in the chart editor. All modifications are applied at once.
-  <img width="1235" height="540" alt="grafik" src="https://github.com/user-attachments/assets/296f76d4-3afa-445a-8acd-6424c02af308" />
+#### Typical Workflow
+1. Disable auto-update in the Chart Editor.
+
+   <img width="627" height="323" alt="Chart editor control to disable auto-update" src="https://github.com/user-attachments/assets/046af96a-3a1c-40fd-8f13-22b219c9e63f" />
+
+2. Make one or more changes (e.g., add/remove curves, adjust appearance, change axes). After the first modification, the chart is marked as inactive/out-of-date with a hint overlay.
+
+   <img width="1236" height="771" alt="Chart showing disabled state with hint after edits" src="https://github.com/user-attachments/assets/62b5fde7-9ddc-4623-a442-c4d961657bb2" />
+
+3. Re-enable auto-update. All pending modifications are applied at once and the chart refreshes.
+   
+   <img width="1235" height="540" alt="Chart updated after re-enabling auto-update" src="https://github.com/user-attachments/assets/296f76d4-3afa-445a-8acd-6424c02af308" />
 
 ### Exports chart to png
 <!-- **Issue:** [Feature: Export chart to png](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1801) -->
