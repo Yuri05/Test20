@@ -74,27 +74,29 @@ In this preview mode, individual parameters are shown as read-only within the sp
 
 <img width="1497" height="385" alt="grafik" src="https://github.com/user-attachments/assets/030ccb09-5d5b-4265-a528-79ffee878c9b" />
 
+### PK-Sim and MoBi: Concurrent Execution of Simulations
 
-### PK-Sim and MoBi: Concurrent execution of simulations
-Previously, when a simulation was running, the complete user interafce was locked and the user has to wait until the simulation run is finished to continue working.
-This is not the case anymore. Only **running** simulation(s) are not accessible for modifications.
+Previously, starting a simulation locked the entire user interface until the run completed. This is no longer the case. Now, only simulations that are currently **running** are locked against modification; all other simulations and project elements remain fully editable.
 
-All other simulations still can be modified, so that the user can for example:
-* start other simulation run(s) parallel to already running simulation
-* create or modify charts
-* create new simulations etc.
+While one or more simulations are running, you can, for example:
+- Start additional simulation runs in parallel
+- Create, edit, or view charts
+- Create new simulations
+- Adjust settings or parameters of simulations that are not currently running
 
-The user can stop ALL running simulations at once by clicking on the `Stop All Simulations` button.
+#### Stopping Simulations
+- To stop all currently running simulations at once, click the `Stop All Simulations` button:
 
-<img width="432" height="161" alt="grafik" src="https://github.com/user-attachments/assets/a18dd941-9a7f-4fa3-a207-90a4b98b90af" />
+  <img width="432" height="161" alt="Stop All Simulations button" src="https://github.com/user-attachments/assets/a18dd941-9a7f-4fa3-a207-90a4b98b90af" />
 
-If only a particular simulation has to be stopped: this can be done via the **Context menu of this simulation in the Simulations Explorer**:
+- To stop a single simulation, use the context menu of that simulation in the **Simulations Explorer**:
 
-<img width="606" height="455" alt="grafik" src="https://github.com/user-attachments/assets/473b8a04-1f94-487e-b8f7-8726f493d4de" />
+  <img width="606" height="455" alt="Context menu for stopping an individual simulation" src="https://github.com/user-attachments/assets/473b8a04-1f94-487e-b8f7-8726f493d4de" />
 
-When more than 1 simulation is running, the progress bar shows the number of running simulations.
+#### Progress Indicator
+When more than one simulation is running, the progress bar displays the number of active simulations:
 
-<img width="187" height="53" alt="grafik" src="https://github.com/user-attachments/assets/348c6ac2-8a3d-4a41-803a-87ce9ab5e090" />
+<img width="187" height="53" alt="Progress bar showing multiple running simulations" src="https://github.com/user-attachments/assets/348c6ac2-8a3d-4a41-803a-87ce9ab5e090" />
 
 ### Batch edit mode for charts
 <!-- **Issue:** [Batch edit mode for charts](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2536) -->
