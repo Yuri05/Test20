@@ -45,9 +45,26 @@ In most cases these components are already installed on the target machine. In t
 <sup>(*)</sup> Implementation of the features was sponsored by **XXX**
 -->
 
-### MoBi: Trace back source of a quantity in simulation
-TODO Description <br>
-TODO Screenshots
+### MoBi: Trace Source of Parameters and Molecule Initial Values in Simulations
+Previously, determining why a parameter (or an initial molecule amount) had a certain value in a simulation could be difficult because definitions might come from several sources (Spatial Structure, Parameter Values, Initial Conditions, Individuals, Expression Profiles, etc.).
+
+With MoBi 12.1, you can now trace the origin of these values in the simulation:
+- View the originating module and building block
+- Identify the type quickly via an icon in the “Building Block” column
+- Distinguish between competing definitions and understand which one was applied
+
+Scope and applicability:
+- Available for simulations **newly created (or rebuilt) in MoBi 12.1**.<br>
+  Existing simulations from earlier versions must be recreated to expose traceability details.
+- Applies to parameters and initial values of molecule amounts.
+
+Benefits:
+- Faster troubleshooting of unexpected values
+- More transparent scenario refinement
+- Reduced risk of misconfiguration when reusing modules
+
+<img width="1021" height="362" alt="grafik" src="https://github.com/user-attachments/assets/3e9e1ec1-443c-4f68-b009-e319e8c2d51d" />
+
 
 ### MoBi: Spatial Structure with Individual selection for preview
 <!-- **Issue:** [Spatial Structure w/ Individual selection for preview](https://github.com/Open-Systems-Pharmacology/MoBi/issues/947) -->
