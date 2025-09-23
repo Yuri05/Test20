@@ -1,6 +1,6 @@
 # Downloads:
 
-- [Full setup TODO](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.1/OSPSuite-Full.12.1.136.exe) 
+- [Full setup](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.1/OSPSuite-Full.12.1.136.exe) 
 
   |**MD5-Hash**| **SHA256-Hash**|
   |-|-|
