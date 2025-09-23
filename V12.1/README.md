@@ -98,14 +98,21 @@ When more than one simulation is running, the progress bar displays the number o
 
 <img width="187" height="53" alt="Progress bar showing multiple running simulations" src="https://github.com/user-attachments/assets/348c6ac2-8a3d-4a41-803a-87ce9ab5e090" />
 
-### Batch edit mode for charts
+### PK-Sim and MoBi: Batch edit mode for charts
 <!-- **Issue:** [Batch edit mode for charts](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2536) -->
 When editing charts with many data points, each change triggers a chart update, causing significant delays. The new batch edit mode allows users to temporarily disable chart updates, make multiple changes to curves, and then update all at once. This speeds up the editing workflow for large datasets and ensures that users can work efficiently without waiting for each update.
 - The UI indicates when the chart is out-of-date due to batch editing.
 - Users can toggle this mode when editing curves or using the data browser.
 
-TODO Screenshots
+Example usage:
+- Step 1: disable chart auto-update in the chart editor
+  <img width="627" height="323" alt="grafik" src="https://github.com/user-attachments/assets/046af96a-3a1c-40fd-8f13-22b219c9e63f" />
 
+- Step 2: modify the chart settings. After the first modification, the chart will be disabled with the hint
+  <img width="1236" height="771" alt="grafik" src="https://github.com/user-attachments/assets/62b5fde7-9ddc-4623-a442-c4d961657bb2" />
+
+- Step 3: enable the chart auto-update again in the chart editor. All modifications are applied at once.
+  <img width="1235" height="540" alt="grafik" src="https://github.com/user-attachments/assets/296f76d4-3afa-445a-8acd-6424c02af308" />
 
 ### Exports chart to png
 <!-- **Issue:** [Feature: Export chart to png](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1801) -->
