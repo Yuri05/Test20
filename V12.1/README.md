@@ -128,7 +128,7 @@ A highly requested feature, this adds the ability to export any chart directly t
 
 ### MoBi: Create Subfolders possible for modules
 <!-- **Issue:** [Feature wish: Create Subfolders possible for modules](https://github.com/Open-Systems-Pharmacology/MoBi/issues/527) -->
-Enables users to organize modules within building block sections by creating subfolders. 
+Enables users to organize modules by creating subfolders. 
 This feature is especially useful when working with multiple structural models, helping to keep the workspace tidy and navigable.
 
 <img width="383" height="301" alt="grafik" src="https://github.com/user-attachments/assets/caa6a86e-8de3-47be-ad8a-2a12ca25a774" />
