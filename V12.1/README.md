@@ -75,10 +75,26 @@ In this preview mode, individual parameters are shown as read-only within the sp
 <img width="1497" height="385" alt="grafik" src="https://github.com/user-attachments/assets/030ccb09-5d5b-4265-a528-79ffee878c9b" />
 
 
-### Concurrent execution of simulations
-TODO Description <br>
-TODO Screenshots
+### PK-Sim and MoBi: Concurrent execution of simulations
+Previously, when a simulation was running, the complete user interafce was locked and the user has to wait until the simulation run is finished to continue working.
+This is not the case anymore. Only **running** simulation(s) are not accessible for modifications.
 
+All other simulations still can be modified, so that the user can for example:
+* start other simulation run(s) parallel to already running simulation
+* create or modify charts
+* create new simulations etc.
+
+The user can stop ALL running simulations at once by clicking on the `Stop All Simulations` button.
+
+<img width="432" height="161" alt="grafik" src="https://github.com/user-attachments/assets/a18dd941-9a7f-4fa3-a207-90a4b98b90af" />
+
+If only a particular simulation has to be stopped: this can be done via the **Context menu of this simulation in the Simulations Explorer**:
+
+<img width="606" height="455" alt="grafik" src="https://github.com/user-attachments/assets/473b8a04-1f94-487e-b8f7-8726f493d4de" />
+
+When more than 1 simulation is running, the progress bar shows the number of running simulations.
+
+<img width="187" height="53" alt="grafik" src="https://github.com/user-attachments/assets/348c6ac2-8a3d-4a41-803a-87ce9ab5e090" />
 
 ### Batch edit mode for charts
 <!-- **Issue:** [Batch edit mode for charts](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2536) -->
