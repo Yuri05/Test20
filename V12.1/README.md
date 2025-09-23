@@ -124,27 +124,24 @@ Editing charts with many data points or numerous curves could previously feel sl
 <!-- **Issue:** [Feature: Export chart to png](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/1801) -->
 A highly requested feature, this adds the ability to export any chart directly to a PNG file for use in presentations or publications. The implementation supports custom formatting and watermark settings, similar to the "copy to clipboard" function.
 
-TODO Screenshots
+<img width="648" height="331" alt="grafik" src="https://github.com/user-attachments/assets/60b5b8a8-1db8-4606-9ba4-7a28d036e187" />
 
 ### MoBi: Create Subfolders possible for modules
 <!-- **Issue:** [Feature wish: Create Subfolders possible for modules](https://github.com/Open-Systems-Pharmacology/MoBi/issues/527) -->
 Enables users to organize modules within building block sections by creating subfolders. 
 This feature is especially useful when working with multiple structural models, helping to keep the workspace tidy and navigable.
 
-TODO Screenshots
+<img width="383" height="301" alt="grafik" src="https://github.com/user-attachments/assets/caa6a86e-8de3-47be-ad8a-2a12ca25a774" />
 
 
-### Save/load neighborhood
+### MoBi: Save/load neighborhood
 <!-- **Issue:** [Save/load neighborhood](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1318) -->
 Users can now save a neighborhood configuration to a PKML file and load it from PKML. This supports efficient reuse and sharing of neighborhood setups, streamlining workflows for complex modeling scenarios.
 
 
-### Calculation of sensitivity in PI should be interruptable
+### PK-Sim and MoBi: Calculation of sensitivity in PI should be interruptable
 <!-- **Issue:** [Calculation of sensitivity in PI should be interruptable](https://github.com/Open-Systems-Pharmacology/OSPSuite.SimModel/issues/175) -->
 Sensitivity calculations in parameter identification (PI) can now be interrupted by the user, similar to regular simulation runs. This saves time and resources, allowing users to halt long or unneeded calculations without waiting for them to finish.
-
-
-
 
 <!--
 ### OSP Platform qualification library and PBPK Models Library
