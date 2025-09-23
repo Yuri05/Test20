@@ -68,9 +68,12 @@ Benefits:
 
 ### MoBi: Spatial Structure with Individual selection for preview
 <!-- **Issue:** [Spatial Structure w/ Individual selection for preview](https://github.com/Open-Systems-Pharmacology/MoBi/issues/947) -->
-Adds a way to select a specific individual for preview in the spatial structure view. This feature allows users to visualize and apply individual-specific settings directly within the spatial structure, improving model personalization and analysis.
+Adds a way to select a specific individual for preview in the spatial structure view. This feature enables users to visualize individual-specific settings directly within the spatial structure, thereby improving model personalization and analysis. 
 
-TODO Screenshots
+In this preview mode, individual parameters are shown as read-only within the spatial structure, but the user can quickly navigate to the parameter definition within the individual for editing.
+
+<img width="1497" height="385" alt="grafik" src="https://github.com/user-attachments/assets/030ccb09-5d5b-4265-a528-79ffee878c9b" />
+
 
 ### Concurrent execution of simulations
 TODO Description <br>
