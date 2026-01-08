@@ -32,7 +32,7 @@ In most cases these components are already installed on the target machine. In t
     * If PK-Sim (or MoBi) Portable crashes immediately on startup: The _.NET Framework_ is missing. Download and install it from [here](https://go.microsoft.com/fwlink/?LinkID=863265).
     * If the program starts and you can create a simulation, but running a simulation crashes: The _C++ Runtime_ is missing. Download and install it from [here](https://aka.ms/vs/17/release/vc_redist.x64.exe).
  
-4. If you use the functionality "Send to MoBi" in PK-Sim: you have to enter the location of MoBi.exe (portable) in the program options (same vice versa for MoBi).
+4. If you use the functionality "Send to MoBi" in PK-Sim: you have to enter the location of MoBi.exe (portable) in the program options (vice versa for MoBi).
  
 5. When you double-click PK-Sim or MoBi project in Windows Explorer - it will always start the **installed application** (the one installed with the full OSP Suite setup), not one of the portables.
  
@@ -75,14 +75,14 @@ In most cases these components are already installed on the target machine. In t
 * [Parameters from Reactions are not listed in the "Possible referenced objects"](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1964)
 * [Renaming of an Expression Profile does not rename the initial conditions](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2168)
 * [Do not allow "*" in path names](https://github.com/Open-Systems-Pharmacology/MoBi/issues/561)
-* [Parameter Values building block: New Parameter Value -> "Relative paht" does not make sense](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2099)
+* [Parameter Values building block: New Parameter Value -> "Relative path" does not make sense](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2099)
 * [Extend a Parameter Values building block with Expression Profiles - do not create the same formula multiple times](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1997)
 * [Deleting of observed data takes too long](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2142)
 * [Performance issue with creating a simulation using Expression Profiles for proteins that are not part of the model](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2109)
 * [Import applications with rename should change all hidden tags](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2003)
 * [Export of Parameter Values to Excel - do not export values defined by a formula](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1985)
 * [Simulation -> Observed Data -> delete multiple entries in one step](https://github.com/Open-Systems-Pharmacology/MoBi/issues/1748)
-* [Default simulation settings -> Ouput Selections -> Cannot add a new ouput if the list is empty](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2161)
+* [Default simulation settings -> Output Selections -> Cannot add a new output if the list is empty](https://github.com/Open-Systems-Pharmacology/MoBi/issues/2161)
 
 ### PK-Sim and MoBi
 * [Sensitivity analysis runs, but no results are produced](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2447)
@@ -139,10 +139,10 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 
 ### New release of the **ospsuite** R package
 
-* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
-* Documentation: s. [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
+* Installation and new features: see [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
+* Documentation: see [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
 
 ### New release of the **tlf** R package
 
-* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
-* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library)
+* Installation and new features: see [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
+* Documentation: see [here](https://www.open-systems-pharmacology.org/TLF-Library)
