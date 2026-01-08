@@ -41,57 +41,6 @@ In most cases these components are already installed on the target machine. In t
 
 # Release Notes for the Open Systems Pharmacology Software Suite 12 Update 2
 
-## New features
-<!--
-<sup>(*)</sup> Implementation of the features was sponsored by **XXX**
--->
-
-### PK-Sim: XXX TODO
-<!-- **Issue:** [XXX]() -->
-...
-
-### MoBi: XXX TODO
-<!-- **Issue:** [XXX]() -->
-...
-
-### PK-Sim and MoBi: XXX TODO
-<!-- **Issue:** [XXX]() -->
-...
-
-<!--
-### OSP Platform qualification library and PBPK Models Library
-#### PBPK Models library extended
-New PBPK models added:
-* ...
-
-Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
--->
-
-### OSP Platform qualification library and PBPK Models Library
-#### PBPK Models library extended
-New PBPK models added:
-* TODO
-
-Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
-
-#### New releases of OSP Platform qualification library and PBPK Models Library
-
-As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite:
-* [**_OSP Qualification Reports library_**](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports)
-  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports/releases/tag/v12.2) for a full list of changes. 
-* [**_OSP-PBPK-Model-Library_**](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library)
-  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/v12.2) for a full list of changes. 
-
-### New release of the **ospsuite** R package
-
-* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
-* Documentation: s. [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
-
-### New release of the **tlf** R package
-
-* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
-* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library)
-
 ## Fixed issues and Improvements
 
 ### PK-Sim
@@ -149,3 +98,51 @@ As with every new OSP Suite release, ALL platform qualification reports and mode
 * [Simulation -> Observed Data -> Deleting an entry refreshes the whole list](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2705)
 * [Exporting results to Excel renders MoBi unresponsive for large results](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2636)
 * [Performance issue with creating a simulation using Expression Profiles for proteins that are not part of the model](https://github.com/Open-Systems-Pharmacology/OSPSuite.Core/issues/2646)
+
+<!-- ## New features -->
+<!--
+<sup>(*)</sup> Implementation of the features was sponsored by **XXX**
+-->
+
+<!-- ### PK-Sim: XXX TODO -->
+<!-- **Issue:** [XXX]() -->
+
+<!-- ### MoBi: XXX TODO -->
+<!-- **Issue:** [XXX]() -->
+
+<!-- ### PK-Sim and MoBi: XXX TODO -->
+<!-- **Issue:** [XXX]() -->
+ 
+<!--
+### OSP Platform qualification library and PBPK Models Library
+#### PBPK Models library extended
+New PBPK models added:
+* ...
+
+Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
+-->
+
+### OSP Platform qualification library and PBPK Models Library
+#### PBPK Models library extended
+New PBPK models added:
+* TODO
+
+Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
+
+#### New releases of OSP Platform qualification library and PBPK Models Library
+
+As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite:
+* [**_OSP Qualification Reports library_**](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports)
+  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports/releases/tag/v12.2) for a full list of changes. 
+* [**_OSP-PBPK-Model-Library_**](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library)
+  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/v12.2) for a full list of changes. 
+
+### New release of the **ospsuite** R package
+
+* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
+* Documentation: s. [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
+
+### New release of the **tlf** R package
+
+* Installation and new features: s. [here TODO](released with 12.1 => https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/v1.6.1)
+* Documentation: s. [here](https://www.open-systems-pharmacology.org/TLF-Library)
