@@ -1,13 +1,13 @@
 # Downloads:
 
-- [Full setup TODO](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.2/OSPSuite-Full.12.2.XXX.exe) 
+- [Full setup](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.2/OSPSuite-Full.12.2.255.exe) 
 
   |**MD5-Hash**| **SHA256-Hash**|
   |-|-|
-  |`TODO`|`TODO` |
+  |`d41fc55cb102cb5706dfa60a92738f6b`|`5a2fc74ac8abfc1d9f369f6a417c911d3dba6762eb05488c8e81bbf9797cda48` |
 
-    TODO<a href="https://www.virustotal.com/gui/file/XXX"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
-- [**ospsuite** R package TODO](Released with 12.1 => https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.3.1)
+    <a href="https://www.virustotal.com/gui/file/5a2fc74ac8abfc1d9f369f6a417c911d3dba6762eb05488c8e81bbf9797cda48"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
+- [**ospsuite** R package](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.4.0)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
   - Additional gene expression databases for human and animal species can be found [here](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/tag/v3.0.1). 
@@ -18,8 +18,8 @@
 Portable versions provide an **alternative** way to use the tools if for some reason the full installation of the OSP software suite is not practical.
 No installation is required: just download and extract the zip archives and run **PKSim.exe** or **MoBi.exe** from the extracted folder.
 
-* [Download PK-Sim 12.2 portable version TODO](https://github.com/Open-Systems-Pharmacology/PK-Sim/releases/tag/v12.2.XXX)
-* [Download MoBi 12.2 portable version TODO](https://github.com/Open-Systems-Pharmacology/MoBi/releases/tag/v12.2.XXX)
+* [Download PK-Sim 12.2 portable version](https://github.com/Open-Systems-Pharmacology/PK-Sim/releases/tag/v12.2.112)
+* [Download MoBi 12.2 portable version](https://github.com/Open-Systems-Pharmacology/MoBi/releases/tag/v12.2.112)
 
 Notes for Portable Versions:
 
@@ -122,12 +122,14 @@ New PBPK models added:
 Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
 -->
 
+<!--
 ### OSP Platform qualification library and PBPK Models Library
 #### PBPK Models library extended
 New PBPK models added:
 * TODO
 
 Model building process and model quality of every new PBPK model is documented in the corresponding _model evaluation report_. 
+-->
 
 #### New releases of OSP Platform qualification library and PBPK Models Library
 
