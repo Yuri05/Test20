@@ -202,7 +202,7 @@ jobs:
               const data = await response.json();
               // Return single embedding or array of embeddings
               return Array.isArray(text) 
-                ? data.data.map(item => item.embedding)
+                ? data.data.sort((a, b) => a.index - b.index).map(item => item.embedding)
                 : data.data[0].embedding;
             }
             
