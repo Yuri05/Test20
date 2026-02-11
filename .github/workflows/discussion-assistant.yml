@@ -140,6 +140,10 @@ jobs:
                         embedding: batchEmbeddings[j]
                       });
                     }
+                    // Small delay between batches to avoid rate limits
+                    if (i + BATCH_SIZE < existingTexts.length) {
+                      await new Promise(resolve => setTimeout(resolve, 500));
+                    }
                   } catch (batchError) {
                     console.error(`Error processing batch ${Math.floor(i / BATCH_SIZE) + 1} (discussions ${batchStart}-${batchEnd - 1}):`, batchError);
                     // Skip this batch and continue with next one
@@ -192,11 +196,13 @@ jobs:
                   input: Array.isArray(text) 
                     ? text.map(t => t.substring(0, 8000)) 
                     : text.substring(0, 8000)
-                })
+                }),
+                signal: AbortSignal.timeout(30000) // 30s timeout
               });
               
               if (!response.ok) {
-                throw new Error(`OpenAI API error: ${response.statusText}`);
+                const errorBody = await response.text();
+                throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorBody}`);
               }
               
               const data = await response.json();
