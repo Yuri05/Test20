@@ -149,13 +149,13 @@ jobs:
                       });
                     }
                   } catch (batchError) {
-                    console.error(`Error processing batch ${Math.floor(i / BATCH_SIZE) + 1}:`, batchError);
+                    console.error(`Error processing batch ${Math.floor(i / BATCH_SIZE) + 1} (discussions ${batchStart}-${batchEnd - 1}):`, batchError);
                     // Skip this batch and continue with next one
                   }
                 }
                 
                 if (discussionEmbeddings.length === 0) {
-                  console.log('No embeddings could be retrieved');
+                  console.log('Failed to retrieve embeddings for all discussion batches. Check API key, quota, and network connectivity.');
                   return [];
                 }
                 
