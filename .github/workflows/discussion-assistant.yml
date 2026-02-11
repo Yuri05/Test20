@@ -152,7 +152,7 @@ jobs:
                 
                 if (discussionEmbeddings.length === 0) {
                   console.log('Failed to retrieve embeddings for all discussion batches. Check API key, quota, and network connectivity.');
-                  return [];
+                  throw new Error('Failed to retrieve embeddings for all discussion batches');
                 }
                 
                 if (discussionEmbeddings.length < existingDiscussions.length) {
