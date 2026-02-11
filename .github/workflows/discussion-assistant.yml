@@ -28,12 +28,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { GoogleGenerativeAI } = require('@google/generative-ai');
-            
             // Configuration
-            const SIMILARITY_THRESHOLD = 0.75; // Adjust between 0-1
             const MAX_RESULTS = 5;
             const MIN_SIMILARITY_TO_COMMENT = 0.70;
+            const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
             
             // Get the new discussion details
@@ -126,18 +124,28 @@ jobs:
                 // Get embedding for new discussion
                 const newEmbedding = await getEmbedding(newText, apiKey);
                 
+                // Prepare texts for batch embedding
+                const existingTexts = existingDiscussions.map(d => `${d.title}\n${d.body || ''}`);
+                
+                // Process in batches of 100
+                const BATCH_SIZE = 100;
+                const allEmbeddings = [];
+                
+                for (let i = 0; i < existingTexts.length; i += BATCH_SIZE) {
+                  const batch = existingTexts.slice(i, i + BATCH_SIZE);
+                  const batchEmbeddings = await getEmbedding(batch, apiKey);
+                  allEmbeddings.push(...batchEmbeddings);
+                }
+                
                 // Calculate similarity scores
                 const similarities = [];
                 
-                for (const discussion of existingDiscussions) {
-                  const existingText = `${discussion.title}\n${discussion.body || ''}`;
-                  const existingEmbedding = await getEmbedding(existingText, apiKey);
-                  
-                  const similarity = cosineSimilarity(newEmbedding, existingEmbedding);
+                for (let i = 0; i < existingDiscussions.length; i++) {
+                  const similarity = cosineSimilarity(newEmbedding, allEmbeddings[i]);
                   
                   if (similarity >= MIN_SIMILARITY_TO_COMMENT) {
                     similarities.push({
-                      discussion,
+                      discussion: existingDiscussions[i],
                       similarity
                     });
                   }
@@ -163,7 +171,9 @@ jobs:
                 },
                 body: JSON.stringify({
                   model: 'text-embedding-3-small',
-                  input: text.substring(0, 8000) // Limit text length
+                  input: Array.isArray(text) 
+                    ? text.map(t => t.substring(0, 8000)) 
+                    : text.substring(0, 8000)
                 })
               });
               
@@ -172,7 +182,10 @@ jobs:
               }
               
               const data = await response.json();
-              return data.data[0].embedding;
+              // Return single embedding or array of embeddings
+              return Array.isArray(text) 
+                ? data.data.map(item => item.embedding)
+                : data.data[0].embedding;
             }
             
             // Function to calculate cosine similarity
@@ -202,7 +215,7 @@ jobs:
                 
                 const similarity = keywordSimilarity(newKeywords, existingKeywords);
                 
-                if (similarity >= MIN_SIMILARITY_TO_COMMENT) {
+                if (similarity >= MIN_KEYWORD_SIMILARITY) {
                   similarities.push({
                     discussion,
                     similarity
