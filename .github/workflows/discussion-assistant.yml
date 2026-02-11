@@ -133,8 +133,24 @@ jobs:
                 
                 for (let i = 0; i < existingTexts.length; i += BATCH_SIZE) {
                   const batch = existingTexts.slice(i, i + BATCH_SIZE);
-                  const batchEmbeddings = await getEmbedding(batch, apiKey);
-                  allEmbeddings.push(...batchEmbeddings);
+                  try {
+                    const batchEmbeddings = await getEmbedding(batch, apiKey);
+                    if (!Array.isArray(batchEmbeddings) || batchEmbeddings.length !== batch.length) {
+                      throw new Error(`Expected ${batch.length} embeddings, got ${batchEmbeddings?.length || 0}`);
+                    }
+                    allEmbeddings.push(...batchEmbeddings);
+                  } catch (batchError) {
+                    console.error(`Error processing batch ${i / BATCH_SIZE + 1}:`, batchError);
+                    // Continue with next batch instead of failing completely
+                    continue;
+                  }
+                }
+                
+                // Verify we have all embeddings before proceeding
+                if (allEmbeddings.length !== existingDiscussions.length) {
+                  console.log(`Warning: Only got ${allEmbeddings.length} embeddings for ${existingDiscussions.length} discussions. Some batches may have failed.`);
+                  // Only process discussions that have embeddings
+                  existingDiscussions = existingDiscussions.slice(0, allEmbeddings.length);
                 }
                 
                 // Calculate similarity scores
