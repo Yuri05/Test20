@@ -311,9 +311,6 @@ jobs:
                   commentBody += `- [${discussion.title}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
                 }
                 
-                commentBody += '\n---\n';
-                commentBody += '*If these discussions don\'t answer your question, please provide more details and someone from the community will help you!*';
-                
                 // Post the comment using GraphQL
                 const discussionId = context.payload.discussion.node_id;
                 
