@@ -124,44 +124,54 @@ jobs:
                 // Get embedding for new discussion
                 const newEmbedding = await getEmbedding(newText, apiKey);
                 
-                // Prepare texts for batch embedding
+                // Prepare texts for batch embedding with indices
                 const existingTexts = existingDiscussions.map(d => `${d.title}\n${d.body || ''}`);
                 
                 // Process in batches of 100
                 const BATCH_SIZE = 100;
-                const allEmbeddings = [];
+                const discussionEmbeddings = []; // Array of {discussion, embedding} pairs
                 
                 for (let i = 0; i < existingTexts.length; i += BATCH_SIZE) {
-                  const batch = existingTexts.slice(i, i + BATCH_SIZE);
+                  const batchStart = i;
+                  const batchEnd = Math.min(i + BATCH_SIZE, existingTexts.length);
+                  const batch = existingTexts.slice(batchStart, batchEnd);
+                  
                   try {
                     const batchEmbeddings = await getEmbedding(batch, apiKey);
                     if (!Array.isArray(batchEmbeddings) || batchEmbeddings.length !== batch.length) {
                       throw new Error(`Expected ${batch.length} embeddings, got ${batchEmbeddings?.length || 0}`);
                     }
-                    allEmbeddings.push(...batchEmbeddings);
+                    // Map embeddings back to their discussions
+                    for (let j = 0; j < batchEmbeddings.length; j++) {
+                      discussionEmbeddings.push({
+                        discussion: existingDiscussions[batchStart + j],
+                        embedding: batchEmbeddings[j]
+                      });
+                    }
                   } catch (batchError) {
-                    console.error(`Error processing batch ${i / BATCH_SIZE + 1}:`, batchError);
-                    // Continue with next batch instead of failing completely
-                    continue;
+                    console.error(`Error processing batch ${Math.floor(i / BATCH_SIZE) + 1}:`, batchError);
+                    // Skip this batch and continue with next one
                   }
                 }
                 
-                // Verify we have all embeddings before proceeding
-                if (allEmbeddings.length !== existingDiscussions.length) {
-                  console.log(`Warning: Only got ${allEmbeddings.length} embeddings for ${existingDiscussions.length} discussions. Some batches may have failed.`);
-                  // Only process discussions that have embeddings
-                  existingDiscussions = existingDiscussions.slice(0, allEmbeddings.length);
+                if (discussionEmbeddings.length === 0) {
+                  console.log('No embeddings could be retrieved');
+                  return [];
+                }
+                
+                if (discussionEmbeddings.length < existingDiscussions.length) {
+                  console.log(`Warning: Only got ${discussionEmbeddings.length} embeddings for ${existingDiscussions.length} discussions. Some batches may have failed.`);
                 }
                 
                 // Calculate similarity scores
                 const similarities = [];
                 
-                for (let i = 0; i < existingDiscussions.length; i++) {
-                  const similarity = cosineSimilarity(newEmbedding, allEmbeddings[i]);
+                for (const item of discussionEmbeddings) {
+                  const similarity = cosineSimilarity(newEmbedding, item.embedding);
                   
                   if (similarity >= MIN_SIMILARITY_TO_COMMENT) {
                     similarities.push({
-                      discussion: existingDiscussions[i],
+                      discussion: item.discussion,
                       similarity
                     });
                   }
