@@ -226,8 +226,8 @@ All modifications through commands for undo/redo:
 - RemoveParameterSetFromCompoundCommand
 - SetDefaultParameterSetCommand
 - RenameParameterSetCommand
-- UpdateSimulationParameterValueInSetCommand
-- RemoveSimulationParameterValueFromSetCommand
+- UpdateParameterValueInSetCommand
+- RemoveParameterValueFromSetCommand
 - CommitSimulationSetParametersCommand (macro command)
 - TrackSimulationParameterChangeCommand / UntrackSimulationParameterChangeCommand
 
@@ -246,7 +246,7 @@ All modifications through commands for undo/redo:
 **Domain (OSPSuite.Core):**
 - ParameterSet: creation, adding/removing parameters, uniqueness by path, IsDefault behavior
 - ParameterSetSelections: selection storage, retrieval, clearing
-- ParameterSetChangeTracker: tracking, untracking, clearing, HasUncommittedChanges
+- SimulationParameterChangeTracker: tracking, untracking, clearing, HasUncommittedChanges
 - Path matching logic: compound identification from paths, edge cases
 
 **Services (PKSim.Core):**
