@@ -251,13 +251,13 @@ All modifications through commands for undo/redo:
 
 **Services (PKSim.Core):**
 - ParameterSetTask: all command operations
-- ParameterSetCommitTask: grouping logic, Parameter Set creation/update
+- SimulationParameterCommitTask: grouping logic, Parameter Set creation/update
 - ParameterSetApplicationService: keyword replacement, value application, warning generation
 - ParameterSetExportImportTask: serialization round-trip
 
 **Presenters (PKSim.Presentation):**
 - ParameterSetPresenter: loading, editing, deletion flows
-- CommitParameterSetsPresenter: parameter grouping, compound exclusion, name handling
+- CommitSimulationParametersPresenter: parameter grouping, compound exclusion, name handling
 - Selection presenter: default selection, clearing, dropdown population
 
 ### Prior Art
