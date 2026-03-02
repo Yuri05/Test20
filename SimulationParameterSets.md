@@ -44,7 +44,7 @@ The system will track uncommitted (compound-dependent) simulation parameter chan
 5. As a user, I want to choose whether to create a new Parameter Set or update an existing one when committing, so that I can organize my parameter configurations appropriately.
 **Juri**: Question: if I change parameters of >1 compound and want to commit: is this choice the same for ALL compounds or per Compound?
 
-7. As a user, I want to exclude specific compounds from the commit action, so that I only save parameters for the compounds I intend to update.
+6. As a user, I want to exclude specific compounds from the commit action, so that I only save parameters for the compounds I intend to update.
 - **Pavel**: The "Commit" command should be a property of a compound, no? In that case, only the values for this specific compound are committed. **Juri**: for me: no.
 
 7. As a user, I want to view all Parameter Sets defined for a compound in a dedicated tab, so that I can see what configurations are available.
@@ -61,13 +61,13 @@ The system will track uncommitted (compound-dependent) simulation parameter chan
           So either it should be possible that none of the Parameter Sets is set to default.
           Or: we introduce an empty Parameter Set, which cannot be deleted und then it can be set to default.
 
-13. As a user, I want to select which Parameter Set to use when adding a compound to my simulation, so that I can choose the appropriate parameter configuration.
+12. As a user, I want to select which Parameter Set to use when adding a compound to my simulation, so that I can choose the appropriate parameter configuration.
 
-15. As a user, I want the default Parameter Set to be automatically selected when I add a compound, so that I get sensible defaults without extra clicks.
+13. As a user, I want the default Parameter Set to be automatically selected when I add a compound, so that I get sensible defaults without extra clicks.
 
-16. As a user, I want to clear the Parameter Set selection (choose "None"), so that I can use the original formula-based values instead.
+14. As a user, I want to clear the Parameter Set selection (choose "None"), so that I can use the original formula-based values instead.
 
-17. As a user, I want parameters applied from a Parameter Set to behave as compound parameters, so that subsequent changes follow normal compound update logic.
+15. As a user, I want parameters applied from a Parameter Set to behave as compound parameters, so that subsequent changes follow normal compound update logic.
 - **Pavel** - don't know. **Juri**: yes, it should be like this imo.
 
 16. As a user, I want to export a Parameter Set to JSON, so that I can share validated configurations with my team.
