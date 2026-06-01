@@ -10,7 +10,7 @@
 - [**ospsuite** R package TODO](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.NNN.NNN)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
-  - Additional gene expression databases for human and animal species can be found [here TODO](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/tag/v3.0.1). 
+  - Additional gene expression databases for human and animal species can be found [here](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/latest). 
  <!--   (**NOTE: Validation of these databases is ongoing and not fully complete.**). -->
 
 <details><summary><b>Portable versions of PK-Sim and MoBi</b></summary><br>
@@ -39,7 +39,7 @@ In most cases these components are already installed on the target machine. In t
 6. If you are using the OSP Qualification Runner (as part of the OSP Qualification Framework) - the path to the portable PK-Sim folder must be passed as an argument, otherwise the installed version will be used.
 </details> 
 
-# Release Notes for the Open Systems Pharmacology Software Suite 12 Update 2
+# Release Notes for the Open Systems Pharmacology Software Suite 12 Update 3
 
 ## Fixed issues and Improvements
 
@@ -133,10 +133,10 @@ Model building process and model quality of every new PBPK model is documented i
 #### New releases of OSP Platform qualification library and PBPK Models Library
 
 As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite:
-* [**_OSP Qualification Reports library_**](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports)
+* [**_OSP Qualification Reports library_**](http://www.open-systems-pharmacology.org/OSP-Qualification-Reports)
   * See the [Release Notes TODO](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports/releases/tag/vNNNNNN.NNNNNNN) for a full list of changes. 
-* [**_OSP-PBPK-Model-Library_**](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library)
-  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/vNNNNNN.NNNNNNN) for a full list of changes. 
+* [**_OSP-PBPK-Model-Library_**](http://www.open-systems-pharmacology.org/OSP-PBPK-Model-Library)
+  * See the [Release Notes TODO](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/vNNNNNN.NNNNNNN) for a full list of changes. 
 
 ### New release of the **ospsuite** R package
 
