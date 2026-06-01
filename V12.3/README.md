@@ -1,12 +1,12 @@
 # Downloads:
 
-- [Full setup TODO](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.3/OSPSuite-Full.12.3.NNNNN.exe) 
+- [Full setup](https://github.com/Open-Systems-Pharmacology/Suite/releases/download/v12.3/OSPSuite-Full.12.3.258.exe) 
 
   |**MD5-Hash**| **SHA256-Hash**|
   |-|-|
-  |`TODO`|`TODO` |
+  |`e6b24e97b1d0ed335c478d273a4bc866`|`4483dabcc6ea08552588da11543e273e8cbdf2d45c3efff8bf806f557b265e6c` |
 
-    TODO <a href="https://www.virustotal.com/gui/file/TODO"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
+    TODO <a href="https://www.virustotal.com/gui/file/4483dabcc6ea08552588da11543e273e8cbdf2d45c3efff8bf806f557b265e6c"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
 - [**ospsuite** R package TODO](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/v12.NNN.NNN)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
