@@ -18,8 +18,8 @@
 Portable versions provide an **alternative** way to use the tools if for some reason the full installation of the OSP software suite is not practical.
 No installation is required: just download and extract the zip archives and run **PKSim.exe** or **MoBi.exe** from the extracted folder.
 
-* [Download PK-Sim 12.3 portable version TODO](https://github.com/Open-Systems-Pharmacology/PK-Sim/releases/tag/v12.3.NNNNN)
-* [Download MoBi 12.3 portable version TODO](https://github.com/Open-Systems-Pharmacology/MoBi/releases/tag/v12.3.NNNNN)
+* [Download PK-Sim 12.3 portable version](https://github.com/Open-Systems-Pharmacology/PK-Sim/releases/tag/v12.3.137)
+* [Download MoBi 12.3 portable version](https://github.com/Open-Systems-Pharmacology/MoBi/releases/tag/v12.3.136)
 
 Notes for Portable Versions:
 
@@ -134,16 +134,18 @@ Model building process and model quality of every new PBPK model is documented i
 
 As with every new OSP Suite release, ALL platform qualification reports and model evaluation reports have been recreated with the new version of the OSP Suite:
 * [**_OSP Qualification Reports library_**](http://www.open-systems-pharmacology.org/OSP-Qualification-Reports)
-  * See the [Release Notes TODO](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports/releases/tag/vNNNNNN.NNNNNNN) for a full list of changes. 
+  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-Qualification-Reports/releases/tag/v12.3) for a full list of changes. 
 * [**_OSP-PBPK-Model-Library_**](http://www.open-systems-pharmacology.org/OSP-PBPK-Model-Library)
-  * See the [Release Notes TODO](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/vNNNNNN.NNNNNNN) for a full list of changes. 
+  * See the [Release Notes](https://github.com/Open-Systems-Pharmacology/OSP-PBPK-Model-Library/releases/tag/v12.3) for a full list of changes. 
 
 ### New release of the **ospsuite** R package
 
 * Installation and new features: see [here TODO](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/tag/vNNNNNN.NNNNNNN.NNNNN)
 * Documentation: see [here](https://www.open-systems-pharmacology.org/OSPSuite-R)
 
+<!--
 ### New release of the **tlf** R package TODO 
 
 * Installation and new features: see [here TODO](https://github.com/Open-Systems-Pharmacology/TLF-Library/releases/tag/vNNNNNN.NNNNNNN.NNNNN)
 * Documentation: see [here](https://www.open-systems-pharmacology.org/TLF-Library)
+-->
