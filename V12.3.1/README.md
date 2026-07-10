@@ -4,9 +4,9 @@
 
   |**MD5-Hash**| **SHA256-Hash**|
   |-|-|
-  |`TODO`|`TODO` |
+  |`99a1bca9f36d896e594d6759d24824c8`|`e910a46f76c852f9f5a021257c021a9e5c101934f722ef11cb9ff9eb10a939aa` |
 
-    <a href="https://www.virustotal.com/gui/file/TODO"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
+    <a href="https://www.virustotal.com/gui/file/e910a46f76c852f9f5a021257c021a9e5c101934f722ef11cb9ff9eb10a939aa"><img src="https://img.shields.io/badge/Scanned%20by%20VirusTotal-000000?style=for-the-badge&logo=virustotal&logoColor=white&labelColor=blue&color=green"></a>
 - [**ospsuite** R package](https://github.com/Open-Systems-Pharmacology/OSPSuite-R/releases/latest)
 
 - [Gene expression database (human)](https://github.com/Open-Systems-Pharmacology/Gene-Expression-Databases/releases/download/v2.0.0/GENEDB_human.expressionDb)
