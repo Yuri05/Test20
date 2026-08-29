@@ -28,10 +28,12 @@ jobs:
             const DOCS_MCP_URL = 'https://docs.open-systems-pharmacology.org/~gitbook/mcp';
             const DOCS_HOSTNAME = 'docs.open-systems-pharmacology.org';
             const MCP_PROTOCOL_VERSION = '2025-06-18';
+            const SUPPORTED_MCP_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
             const DOCS_MCP_BUDGET_MS = 15000; // total budget for the whole best-effort docs lookup
+            const MAX_HELP_TOPIC_CANDIDATES = 20; // cap the inputs of a single embeddings request
             const MIN_HELP_TOPIC_SIMILARITY = 0.45; // embedding similarity discussion <-> documentation page
-            const MIN_HELP_TOPIC_RELEVANCE = 0.30; // keyword fallback: share of discussion keywords covered by the page
-            const MIN_HELP_TOPIC_KEYWORDS = 3; // keyword fallback: absolute floor of shared keywords
+            const MIN_HELP_TOPIC_RELEVANCE = 0.35; // keyword fallback: share of discussion keywords covered by the page
+            const MIN_HELP_TOPIC_KEYWORDS = 4; // keyword fallback: absolute floor of shared keywords
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
@@ -321,41 +323,70 @@ jobs:
                 }
               }, { deadline });
 
+              const negotiatedVersion = handshake.result?.protocolVersion || MCP_PROTOCOL_VERSION;
+              if (!SUPPORTED_MCP_PROTOCOL_VERSIONS.includes(negotiatedVersion)) {
+                throw new Error(`Docs MCP negotiated unsupported protocol version "${negotiatedVersion}"`);
+              }
+
               const session = {
                 deadline,
-                protocolVersion: handshake.result?.protocolVersion || MCP_PROTOCOL_VERSION,
+                protocolVersion: negotiatedVersion,
                 sessionId: handshake.sessionId
               };
 
-              // Required by the spec before any further requests
-              await postDocsMcpRequest({
-                jsonrpc: '2.0',
-                method: 'notifications/initialized'
-              }, session);
+              try {
+                // Required by the spec before any further requests
+                const initialized = await postDocsMcpRequest({
+                  jsonrpc: '2.0',
+                  method: 'notifications/initialized'
+                }, session);
+                session.sessionId = initialized.sessionId;
 
-              const response = await postDocsMcpRequest({
-                jsonrpc: '2.0',
-                id: 2,
-                method: 'tools/call',
-                params: { name: toolName, arguments: args }
-              }, session);
+                const response = await postDocsMcpRequest({
+                  jsonrpc: '2.0',
+                  id: 2,
+                  method: 'tools/call',
+                  params: { name: toolName, arguments: args }
+                }, session);
 
-              const result = response.result;
-              if (!result) {
-                throw new Error('Docs MCP returned an empty result');
-              }
-              if (result.isError) {
-                const details = (result.content || [])
-                  .filter(item => item.type === 'text')
-                  .map(item => item.text)
-                  .join('\n');
-                throw new Error(`Docs MCP tool "${toolName}" failed: ${details || 'no details provided'}`);
-              }
-              if (!Array.isArray(result.content)) {
-                throw new Error(`Docs MCP tool "${toolName}" returned no content array (unexpected response shape)`);
-              }
+                const result = response.result;
+                if (!result) {
+                  throw new Error('Docs MCP returned an empty result');
+                }
+                if (result.isError) {
+                  const details = (result.content || [])
+                    .filter(item => item.type === 'text')
+                    .map(item => item.text)
+                    .join('\n');
+                  throw new Error(`Docs MCP tool "${toolName}" failed: ${details || 'no details provided'}`);
+                }
+                if (!Array.isArray(result.content)) {
+                  throw new Error(`Docs MCP tool "${toolName}" returned no content array (unexpected response shape)`);
+                }
 
-              return result;
+                return result;
+              } finally {
+                await terminateDocsMcpSession(session);
+              }
+            }
+
+            // Release a server-side session, if the server created one
+            async function terminateDocsMcpSession(session) {
+              if (!session.sessionId) return;
+
+              try {
+                const response = await fetch(DOCS_MCP_URL, {
+                  method: 'DELETE',
+                  headers: {
+                    'MCP-Protocol-Version': session.protocolVersion,
+                    'Mcp-Session-Id': session.sessionId
+                  },
+                  signal: AbortSignal.timeout(Math.max(session.deadline - Date.now(), 1000))
+                });
+                await response.text();
+              } catch (error) {
+                core.warning(`Could not terminate docs MCP session: ${error.message}`);
+              }
             }
 
             // Send a single JSON-RPC request (or notification) and return its result
@@ -388,8 +419,12 @@ jobs:
 
               const sessionId = response.headers.get('mcp-session-id') || session.sessionId;
 
-              // Notifications get no response body
-              if (payload.id === undefined) return { result: undefined, sessionId };
+              // Notifications get no response body content we care about, but the
+              // stream still has to be consumed
+              if (payload.id === undefined) {
+                await response.text();
+                return { result: undefined, sessionId };
+              }
 
               const rawBody = await response.text();
               const contentType = response.headers.get('content-type') || '';
@@ -432,7 +467,7 @@ jobs:
                 try {
                   events.push(JSON.parse(dataLines.join('\n')));
                 } catch (parseError) {
-                  // Ignore non-JSON events (e.g. keep-alive comments)
+                  console.log(`Ignoring non-JSON SSE event: ${parseError.message}`);
                 }
               }
 
@@ -441,12 +476,18 @@ jobs:
 
             // Escape text used as a markdown link label. Titles come from the discussions
             // API and from the (untrusted) MCP server, so collapse line breaks and escape
-            // the characters that carry markdown/HTML meaning.
+            // the characters that could terminate the label or open raw HTML.
             function escapeLinkText(text) {
               return text
                 .replace(/\s+/g, ' ')
                 .trim()
-                .replace(/([\\`*_{}\[\]()<>#+\-!|~])/g, '\\$1');
+                .replace(/([\\`\[\]<>])/g, '\\$1');
+            }
+
+            // Wrap a link target in angle brackets so that URLs containing parentheses
+            // stay intact; the target itself is validated by sanitizeDocsLink.
+            function markdownLinkTarget(url) {
+              return `<${url}>`;
             }
 
             // Accept only https links pointing at the official documentation host.
@@ -461,8 +502,8 @@ jobs:
               }
 
               if (url.protocol !== 'https:' || url.hostname !== DOCS_HOSTNAME) return null;
-              // Characters that would break out of the markdown link target
-              if (/[()<>\s\\]/.test(url.href)) return null;
+              // Characters that would break out of an angle-bracket link destination
+              if (/[<>\s\\]/.test(url.href)) return null;
 
               return url;
             }
@@ -493,6 +534,9 @@ jobs:
                 try {
                   const queryEmbedding = await getQueryEmbedding(query, apiKey);
                   const topicEmbeddings = await getEmbedding(candidates.map(c => c.text), apiKey);
+                  if (!Array.isArray(topicEmbeddings) || topicEmbeddings.length !== candidates.length) {
+                    throw new Error(`Expected ${candidates.length} embeddings, got ${topicEmbeddings?.length || 0}`);
+                  }
                   return candidates.map((candidate, index) => ({
                     candidate,
                     score: cosineSimilarity(queryEmbedding, topicEmbeddings[index]),
@@ -511,10 +555,22 @@ jobs:
               }));
             }
 
+            // The documentation lookup can be switched off via the DOCS_HELP_TOPICS_ENABLED
+            // repository variable; unrecognized values keep the feature on but are reported.
+            function helpTopicsEnabled() {
+              const raw = (process.env.DOCS_HELP_TOPICS_ENABLED || '').trim().toLowerCase();
+              if (raw === '') return true;
+              if (['false', '0', 'no', 'off'].includes(raw)) return false;
+              if (['true', '1', 'yes', 'on'].includes(raw)) return true;
+
+              core.warning(`Unrecognized DOCS_HELP_TOPICS_ENABLED value "${raw}", keeping help topics enabled`);
+              return true;
+            }
+
             // Search the OSP documentation for help topics relevant to the discussion
             async function findHelpTopics(query) {
-              if (process.env.DOCS_HELP_TOPICS_ENABLED === 'false') {
-                console.log('Documentation help topics are disabled (DOCS_HELP_TOPICS_ENABLED=false)');
+              if (!helpTopicsEnabled()) {
+                console.log('Documentation help topics are disabled (DOCS_HELP_TOPICS_ENABLED)');
                 return [];
               }
 
@@ -529,8 +585,8 @@ jobs:
                 for (const item of result.content) {
                   if (item.type !== 'text' || !item.text) continue;
 
-                  const titleMatch = item.text.match(/^Title:\s*(.+)$/m);
-                  const linkMatch = item.text.match(/^Link:\s*(\S+)$/m);
+                  const titleMatch = item.text.match(/^Title:[ \t]*(.+?)[ \t]*$/m);
+                  const linkMatch = item.text.match(/^Link:[ \t]*(\S+)[ \t]*$/m);
                   if (!titleMatch || !linkMatch) continue;
 
                   const url = sanitizeDocsLink(linkMatch[1]);
@@ -551,9 +607,10 @@ jobs:
                   // Score against the title and page content only, without the Title:/Link: boilerplate
                   const content = item.text
                     .replace(/^(?:Title|Link):[^\n]*\n?/gm, '')
-                    .replace(/^Content:[ \t]*/m, '');
+                    .replace(/^Content:[ \t]*/gm, '');
 
                   candidates.push({ title, link: url.href, text: `${title}\n${content}` });
+                  if (candidates.length >= MAX_HELP_TOPIC_CANDIDATES) break;
                 }
 
                 if (candidates.length === 0) {
@@ -619,7 +676,7 @@ jobs:
                     const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
 
                     const safeTitle = escapeLinkText(discussion.title);
-                    commentBody += `- [${safeTitle}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
+                    commentBody += `- [${safeTitle}](${markdownLinkTarget(discussion.url)}) (${percentage}% similar)${answeredTag}\n`;
                   }
                 }
 
@@ -629,7 +686,7 @@ jobs:
 
                   for (const topic of helpTopics) {
                     const safeTitle = escapeLinkText(topic.title);
-                    commentBody += `- [${safeTitle}](${topic.link})\n`;
+                    commentBody += `- [${safeTitle}](${markdownLinkTarget(topic.link)})\n`;
                   }
                 }
 
