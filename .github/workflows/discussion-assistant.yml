@@ -22,6 +22,8 @@ jobs:
           script: |
             // Configuration
             const MAX_RESULTS = 5;
+            const MAX_HELP_TOPICS = 5;
+            const DOCS_MCP_URL = 'https://docs.open-systems-pharmacology.org/~gitbook/mcp';
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
@@ -283,45 +285,157 @@ jobs:
               return intersection.size / union.size;
             }
             
+            // Call a tool on the OSP documentation MCP server (streamable HTTP transport)
+            async function callDocsMcpTool(toolName, args) {
+              const response = await fetch(DOCS_MCP_URL, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json, text/event-stream'
+                },
+                body: JSON.stringify({
+                  jsonrpc: '2.0',
+                  id: 1,
+                  method: 'tools/call',
+                  params: { name: toolName, arguments: args }
+                }),
+                signal: AbortSignal.timeout(60000)
+              });
+
+              if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`Docs MCP error: ${response.status} ${response.statusText} - ${errorBody}`);
+              }
+
+              const rawBody = await response.text();
+              const contentType = response.headers.get('content-type') || '';
+
+              let message;
+              if (contentType.includes('text/event-stream')) {
+                // Parse SSE: collect the first "data:" payload that contains a JSON-RPC response
+                for (const line of rawBody.split('\n')) {
+                  const trimmed = line.trim();
+                  if (!trimmed.startsWith('data:')) continue;
+                  try {
+                    const parsed = JSON.parse(trimmed.slice(5).trim());
+                    if (parsed.result || parsed.error) {
+                      message = parsed;
+                      break;
+                    }
+                  } catch (parseError) {
+                    // Ignore non-JSON data lines
+                  }
+                }
+              } else {
+                message = JSON.parse(rawBody);
+              }
+
+              if (!message) {
+                throw new Error('Docs MCP response did not contain a JSON-RPC message');
+              }
+              if (message.error) {
+                throw new Error(`Docs MCP error: ${message.error.message || JSON.stringify(message.error)}`);
+              }
+
+              return message.result;
+            }
+
+            // Search the OSP documentation for help topics relevant to the discussion
+            async function findHelpTopics(query) {
+              try {
+                const result = await callDocsMcpTool('searchDocumentation', {
+                  query: query.substring(0, 1000)
+                });
+
+                if (result?.isError) {
+                  throw new Error('Docs MCP returned an error result');
+                }
+
+                const topics = [];
+                const seenLinks = new Set();
+
+                for (const item of result?.content || []) {
+                  if (item.type !== 'text' || !item.text) continue;
+
+                  const titleMatch = item.text.match(/^Title:\s*(.*)$/m);
+                  const linkMatch = item.text.match(/^Link:\s*(\S+)$/m);
+                  if (!linkMatch) continue;
+
+                  const link = linkMatch[1];
+                  if (seenLinks.has(link)) continue;
+                  seenLinks.add(link);
+
+                  topics.push({
+                    title: (titleMatch?.[1] || link).trim(),
+                    link
+                  });
+
+                  if (topics.length >= MAX_HELP_TOPICS) break;
+                }
+
+                console.log(`Found ${topics.length} relevant help topics in the OSP documentation`);
+                return topics;
+              } catch (error) {
+                console.error('Error searching OSP documentation:', error);
+                return [];
+              }
+            }
+
             // Main execution
             try {
               // Fetch all existing discussions
               const existingDiscussions = await fetchAllDiscussions();
-              
-              if (existingDiscussions.length === 0) {
-                console.log('No existing discussions found');
-                return;
-              }
-              
+
               // Prepare text for comparison
               const newText = `${discussionTitle}\n${discussionBody}`;
-              
-              // Try AI-based similarity first, fallback to keyword matching
-              let similarDiscussions;
-              if (process.env.OPENAI_API_KEY) {
-                console.log('Using OpenAI for similarity analysis');
-                similarDiscussions = await calculateSimilarityOpenAI(newText, existingDiscussions);
-              }
-              if (!similarDiscussions || similarDiscussions.length === 0) {
-                console.log('Using keyword matching for similarity analysis');
-                similarDiscussions = calculateSimilarityKeywords(newText, existingDiscussions);
-              }
-              
-              // Post comment if similar discussions found
-              if (similarDiscussions.length > 0) {
-                console.log(`Found ${similarDiscussions.length} similar discussions`);
 
-                let commentBody = '🤖 **Discussion Assistant**: I found some similar discussions that might be helpful:\n\n';
-                
-                for (const item of similarDiscussions) {
-                  const { discussion, similarity } = item;
-                  const percentage = Math.round(similarity * 100);
-                  const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
-                  
-                  const safeTitle = discussion.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-                  commentBody += `- [${safeTitle}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
+              // Try AI-based similarity first, fallback to keyword matching
+              let similarDiscussions = [];
+              if (existingDiscussions.length === 0) {
+                console.log('No existing discussions found');
+              } else {
+                if (process.env.OPENAI_API_KEY) {
+                  console.log('Using OpenAI for similarity analysis');
+                  similarDiscussions = await calculateSimilarityOpenAI(newText, existingDiscussions);
                 }
-                
+                if (!similarDiscussions || similarDiscussions.length === 0) {
+                  console.log('Using keyword matching for similarity analysis');
+                  similarDiscussions = calculateSimilarityKeywords(newText, existingDiscussions);
+                }
+              }
+
+              // Look for relevant help topics in the OSP documentation
+              const helpTopics = await findHelpTopics(newText);
+
+              // Post comment if similar discussions and/or help topics were found
+              if (similarDiscussions.length > 0 || helpTopics.length > 0) {
+                console.log(`Found ${similarDiscussions.length} similar discussions and ${helpTopics.length} help topics`);
+
+                let commentBody = '🤖 **Discussion Assistant**\n\n';
+
+                if (similarDiscussions.length > 0) {
+                  commentBody += 'I found some similar discussions that might be helpful:\n\n';
+
+                  for (const item of similarDiscussions) {
+                    const { discussion, similarity } = item;
+                    const percentage = Math.round(similarity * 100);
+                    const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
+
+                    const safeTitle = discussion.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                    commentBody += `- [${safeTitle}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
+                  }
+                }
+
+                if (helpTopics.length > 0) {
+                  if (similarDiscussions.length > 0) commentBody += '\n';
+                  commentBody += 'Relevant help topics from the [Open Systems Pharmacology Documentation](https://docs.open-systems-pharmacology.org/):\n\n';
+
+                  for (const topic of helpTopics) {
+                    const safeTitle = topic.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                    commentBody += `- [${safeTitle}](${topic.link})\n`;
+                  }
+                }
+
                 // Post the comment using GraphQL
                 const discussionId = context.payload.discussion.node_id;
                 
@@ -342,7 +456,7 @@ jobs:
                 
                 console.log('Comment posted successfully');
               } else {
-                console.log('No similar discussions found above threshold');
+                console.log('No similar discussions above threshold and no relevant help topics found');
               }
               
             } catch (error) {
