@@ -39,7 +39,7 @@ jobs:
             // Bounds the cost and latency of scoring; search results beyond this rank are
             // rarely relevant, and the limit keeps the embeddings request to one batch
             const MAX_HELP_TOPIC_CANDIDATES = 20;
-            const MIN_HELP_TOPIC_SIMILARITY = 0.45; // embedding similarity discussion <-> documentation page
+            const MIN_HELP_TOPIC_SIMILARITY = 0.35; // embedding similarity discussion <-> documentation page
             const MIN_HELP_TOPIC_RELEVANCE = 0.35; // keyword fallback: overlap coefficient discussion <-> page keywords
             const MIN_HELP_TOPIC_KEYWORDS = 4; // keyword fallback: absolute floor of shared keywords
             // Keyword fallback: smallest page-keyword count used in the overlap denominator, so
