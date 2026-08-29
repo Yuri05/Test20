@@ -17,11 +17,34 @@ jobs:
         uses: actions/github-script@v8
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Set to 'false' to stop sending discussion text to the documentation
+          # MCP server; unset means enabled
+          DOCS_HELP_TOPICS_ENABLED: ${{ vars.DOCS_HELP_TOPICS_ENABLED }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             // Configuration
             const MAX_RESULTS = 5;
+            const MAX_HELP_TOPICS = 5;
+            const DOCS_MCP_URL = 'https://docs.open-systems-pharmacology.org/~gitbook/mcp';
+            const DOCS_HOSTNAME = 'docs.open-systems-pharmacology.org';
+            const MCP_PROTOCOL_VERSION = '2025-06-18';
+            const SUPPORTED_MCP_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
+            // The MCP-Protocol-Version header was introduced in 2025-06-18 and must
+            // not be sent when an older revision has been negotiated
+            const MCP_VERSIONS_WITH_PROTOCOL_HEADER = ['2025-06-18'];
+            const DOCS_MCP_BUDGET_MS = 15000; // budget for the MCP round-trips of the docs lookup
+            const DOCS_MCP_CLEANUP_BUDGET_MS = 3000; // independent budget for releasing the MCP session
+            const HELP_TOPIC_SCORING_BUDGET_MS = 30000; // budget for scoring the retrieved candidates
+            // Bounds the cost and latency of scoring; search results beyond this rank are
+            // rarely relevant, and the limit keeps the embeddings request to one batch
+            const MAX_HELP_TOPIC_CANDIDATES = 20;
+            const MIN_HELP_TOPIC_SIMILARITY = 0.45; // embedding similarity discussion <-> documentation page
+            const MIN_HELP_TOPIC_RELEVANCE = 0.35; // keyword fallback: overlap coefficient discussion <-> page keywords
+            const MIN_HELP_TOPIC_KEYWORDS = 4; // keyword fallback: absolute floor of shared keywords
+            // Keyword fallback: smallest page-keyword count used in the overlap denominator, so
+            // that short stub or index pages cannot reach the threshold on the shared-keyword floor
+            const MIN_HELP_TOPIC_PAGE_KEYWORDS = 15;
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
@@ -114,86 +137,130 @@ jobs:
               
               try {
                 // Get embedding for new discussion
-                const newEmbedding = await getEmbedding(newText, apiKey);
-                
-                // Prepare texts for batch embedding with indices
+                const newEmbedding = await getQueryEmbedding(newText, apiKey);
+
+                // Prepare texts for batch embedding, keeping the discussion order
                 const existingTexts = existingDiscussions.map(d => `${d.title}\n${d.body || ''}`);
-                
-                // Process in batches of 50
-                const BATCH_SIZE = 50;
-                const MAX_RETRIES = 3;
-                const discussionEmbeddings = []; // Array of {discussion, embedding} pairs
-                
-                for (let i = 0; i < existingTexts.length; i += BATCH_SIZE) {
-                  const batchStart = i;
-                  const batchEnd = Math.min(i + BATCH_SIZE, existingTexts.length);
-                  const batch = existingTexts.slice(batchStart, batchEnd);
-                  
-                  let success = false;
-                  for (let attempt = 1; attempt <= MAX_RETRIES && !success; attempt++) {
-                    try {
-                      const batchEmbeddings = await getEmbedding(batch, apiKey);
-                      if (!Array.isArray(batchEmbeddings) || batchEmbeddings.length !== batch.length) {
-                        throw new Error(`Expected ${batch.length} embeddings, got ${batchEmbeddings?.length || 0}`);
-                      }
-                      // Map embeddings back to their discussions
-                      for (let j = 0; j < batchEmbeddings.length; j++) {
-                        discussionEmbeddings.push({
-                          discussion: existingDiscussions[batchStart + j],
-                          embedding: batchEmbeddings[j]
-                        });
-                      }
-                      success = true;
-                    } catch (batchError) {
-                      console.error(`Error processing batch ${Math.floor(i / BATCH_SIZE) + 1} (discussions ${batchStart}-${batchEnd - 1}), attempt ${attempt}/${MAX_RETRIES}:`, batchError);
-                      if (attempt < MAX_RETRIES) {
-                        const backoff = Math.pow(2, attempt) * 1000;
-                        console.log(`Retrying in ${backoff / 1000}s...`);
-                        await new Promise(resolve => setTimeout(resolve, backoff));
-                      }
-                    }
-                  }
-                  // Delay between batches to avoid rate limits
-                  if (i + BATCH_SIZE < existingTexts.length) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                  }
+                const existingEmbeddings = await getEmbeddingsWithRetry(existingTexts, apiKey);
+
+                // A partial result is acceptable here: the discussions of a failed
+                // batch are simply not considered as similar candidates
+                const embedded = existingEmbeddings.filter(embedding => embedding !== null).length;
+                if (embedded === 0) {
+                  throw new Error('Failed to retrieve embeddings for all discussion batches. Check API key, quota, and network connectivity.');
                 }
-                
-                if (discussionEmbeddings.length === 0) {
-                  console.log('Failed to retrieve embeddings for all discussion batches. Check API key, quota, and network connectivity.');
-                  throw new Error('Failed to retrieve embeddings for all discussion batches');
+                if (embedded < existingDiscussions.length) {
+                  console.log(`Warning: Only got ${embedded} embeddings for ${existingDiscussions.length} discussions. Some batches may have failed.`);
                 }
-                
-                if (discussionEmbeddings.length < existingDiscussions.length) {
-                  console.log(`Warning: Only got ${discussionEmbeddings.length} embeddings for ${existingDiscussions.length} discussions. Some batches may have failed.`);
-                }
-                
+
                 // Calculate similarity scores
                 const similarities = [];
-                
-                for (const item of discussionEmbeddings) {
-                  const similarity = cosineSimilarity(newEmbedding, item.embedding);
-                  
+
+                for (let i = 0; i < existingDiscussions.length; i++) {
+                  const embedding = existingEmbeddings[i];
+                  if (!embedding) continue;
+
+                  const similarity = cosineSimilarity(newEmbedding, embedding);
+
                   if (similarity >= MIN_SIMILARITY_TO_COMMENT) {
                     similarities.push({
-                      discussion: item.discussion,
+                      discussion: existingDiscussions[i],
                       similarity
                     });
                   }
                 }
-                
+
                 // Sort by similarity and return top results
                 similarities.sort((a, b) => b.similarity - a.similarity);
                 return similarities.slice(0, MAX_RESULTS);
-                
+
               } catch (error) {
-                console.error('Error calculating similarity:', error);
+                core.warning(`Error calculating similarity: ${error.message}`);
                 return [];
               }
             }
             
+            // Embedding of the new discussion text, computed once and reused by the
+            // discussion similarity and the documentation help topic scoring
+            const queryEmbeddingCache = new Map();
+            async function getQueryEmbedding(text, apiKey) {
+              if (!queryEmbeddingCache.has(text)) {
+                queryEmbeddingCache.set(text, await getEmbedding(text, apiKey));
+              }
+              return queryEmbeddingCache.get(text);
+            }
+
+            // Embed a list of texts, batching the requests and retrying transient
+            // failures (429 and 5xx, plus network/timeout errors) with exponential
+            // backoff. Non-retryable failures such as 401 or 400 fail the batch
+            // immediately. Returns one entry per input text, `null` where the batch
+            // could not be embedded, so that callers can decide whether a partial
+            // result is acceptable. An optional deadline bounds the whole call.
+            const EMBEDDING_BATCH_SIZE = 50;
+            const EMBEDDING_MAX_RETRIES = 3;
+            const EMBEDDING_TIMEOUT_MS = 60000;
+            async function getEmbeddingsWithRetry(texts, apiKey, options = {}) {
+              const { deadline } = options;
+              const embeddings = new Array(texts.length).fill(null);
+
+              const remainingMs = () => (deadline === undefined ? Infinity : deadline - Date.now());
+
+              for (let i = 0; i < texts.length; i += EMBEDDING_BATCH_SIZE) {
+                const batch = texts.slice(i, i + EMBEDDING_BATCH_SIZE);
+                const batchNumber = Math.floor(i / EMBEDDING_BATCH_SIZE) + 1;
+
+                for (let attempt = 1; attempt <= EMBEDDING_MAX_RETRIES; attempt++) {
+                  const remaining = remainingMs();
+                  if (remaining <= 0) {
+                    console.log(`Embedding time budget exhausted, skipping batch ${batchNumber}`);
+                    return embeddings;
+                  }
+
+                  try {
+                    const timeout = Math.min(EMBEDDING_TIMEOUT_MS, remaining);
+                    const batchEmbeddings = await getEmbedding(batch, apiKey, timeout);
+                    if (!Array.isArray(batchEmbeddings) || batchEmbeddings.length !== batch.length) {
+                      throw new Error(`Expected ${batch.length} embeddings, got ${batchEmbeddings?.length || 0}`);
+                    }
+                    for (let j = 0; j < batchEmbeddings.length; j++) {
+                      embeddings[i + j] = batchEmbeddings[j];
+                    }
+                    break;
+                  } catch (batchError) {
+                    const retryable = isRetryableEmbeddingError(batchError);
+                    console.log(`Embedding batch ${batchNumber} attempt ${attempt}/${EMBEDDING_MAX_RETRIES} failed: ${batchError.message}`);
+                    if (!retryable || attempt === EMBEDDING_MAX_RETRIES) {
+                      if (!retryable) console.log('Error is not retryable, giving up on this batch');
+                      break;
+                    }
+                    const backoff = Math.pow(2, attempt) * 1000;
+                    if (backoff >= remainingMs()) {
+                      console.log('Not enough time budget left to retry');
+                      break;
+                    }
+                    console.log(`Retrying in ${backoff / 1000}s...`);
+                    await new Promise(resolve => setTimeout(resolve, backoff));
+                  }
+                }
+
+                // Delay between batches to avoid rate limits
+                if (i + EMBEDDING_BATCH_SIZE < texts.length && remainingMs() > 1000) {
+                  await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+              }
+
+              return embeddings;
+            }
+
+            // Only rate limiting, server errors and transport failures are worth retrying;
+            // an authentication or malformed-request error will fail again identically.
+            function isRetryableEmbeddingError(error) {
+              if (error.status === undefined) return true; // network error, timeout or abort
+              return error.status === 429 || error.status >= 500;
+            }
+
             // Function to get embedding from OpenAI
-            async function getEmbedding(text, apiKey) {
+            async function getEmbedding(text, apiKey, timeoutMs = EMBEDDING_TIMEOUT_MS) {
               const response = await fetch('https://api.openai.com/v1/embeddings', {
                 method: 'POST',
                 headers: {
@@ -206,12 +273,15 @@ jobs:
                     ? text.map(t => t.substring(0, 8000)) 
                     : text.substring(0, 8000)
                 }),
-                signal: AbortSignal.timeout(60000) // 60s timeout
+                signal: AbortSignal.timeout(timeoutMs)
               });
-              
+
               if (!response.ok) {
                 const errorBody = await response.text();
-                throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorBody}`);
+                const error = new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorBody}`);
+                // Used to decide whether the request is worth retrying
+                error.status = response.status;
+                throw error;
               }
               
               const data = await response.json();
@@ -283,45 +353,416 @@ jobs:
               return intersection.size / union.size;
             }
             
+            // Call a tool on the OSP documentation MCP server (streamable HTTP transport).
+            // NOTE: the discussion title and body are sent to this third-party endpoint;
+            // set the DOCS_HELP_TOPICS_ENABLED repository variable to 'false' to disable this.
+            // The full handshake (initialize -> notifications/initialized -> tools/call) is
+            // performed per run, carrying over the negotiated protocol version and, if the
+            // server is stateful, the Mcp-Session-Id it returns.
+            async function callDocsMcpTool(toolName, args, deadline) {
+              const handshake = await postDocsMcpRequest({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'initialize',
+                params: {
+                  protocolVersion: MCP_PROTOCOL_VERSION,
+                  capabilities: {},
+                  clientInfo: { name: 'discussion-assistant', version: '1.0.0' }
+                }
+              }, { deadline });
+
+              const negotiatedVersion = handshake.result?.protocolVersion || MCP_PROTOCOL_VERSION;
+              if (!SUPPORTED_MCP_PROTOCOL_VERSIONS.includes(negotiatedVersion)) {
+                throw new Error(`Docs MCP negotiated unsupported protocol version "${negotiatedVersion}"`);
+              }
+
+              const session = {
+                deadline,
+                // Only revisions that define the header get it on subsequent requests
+                protocolVersion: MCP_VERSIONS_WITH_PROTOCOL_HEADER.includes(negotiatedVersion)
+                  ? negotiatedVersion
+                  : null,
+                sessionId: handshake.sessionId
+              };
+
+              try {
+                // Required by the spec before any further requests
+                const initialized = await postDocsMcpRequest({
+                  jsonrpc: '2.0',
+                  method: 'notifications/initialized'
+                }, session);
+                session.sessionId = initialized.sessionId;
+
+                const response = await postDocsMcpRequest({
+                  jsonrpc: '2.0',
+                  id: 2,
+                  method: 'tools/call',
+                  params: { name: toolName, arguments: args }
+                }, session);
+
+                const result = response.result;
+                if (!result) {
+                  throw new Error('Docs MCP returned an empty result');
+                }
+                if (result.isError) {
+                  const details = (result.content || [])
+                    .filter(item => item.type === 'text')
+                    .map(item => item.text)
+                    .join('\n');
+                  throw new Error(`Docs MCP tool "${toolName}" failed: ${details || 'no details provided'}`);
+                }
+                if (!Array.isArray(result.content)) {
+                  throw new Error(`Docs MCP tool "${toolName}" returned no content array (unexpected response shape)`);
+                }
+
+                return result;
+              } finally {
+                await terminateDocsMcpSession(session);
+              }
+            }
+
+            // Release a server-side session, if the server created one. Cleanup gets its
+            // own small budget rather than sharing the (usually exhausted) lookup budget,
+            // so that stateful servers do not leak sessions; failures are logged only, to
+            // avoid obscuring the original error of a failed lookup.
+            async function terminateDocsMcpSession(session) {
+              if (!session.sessionId) return;
+
+              try {
+                const headers = { 'Mcp-Session-Id': session.sessionId };
+                if (session.protocolVersion) headers['MCP-Protocol-Version'] = session.protocolVersion;
+
+                const response = await fetch(DOCS_MCP_URL, {
+                  method: 'DELETE',
+                  headers,
+                  signal: AbortSignal.timeout(DOCS_MCP_CLEANUP_BUDGET_MS)
+                });
+                await response.text();
+              } catch (error) {
+                console.log(`Could not terminate docs MCP session: ${error.message}`);
+              }
+            }
+
+            // Send a single JSON-RPC request (or notification) and return its result
+            // plus the session id, honouring the shared deadline of the docs lookup.
+            async function postDocsMcpRequest(payload, session) {
+              const remaining = session.deadline - Date.now();
+              if (remaining <= 0) {
+                throw new Error('Docs MCP time budget exhausted');
+              }
+
+              const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json, text/event-stream'
+              };
+              // Per spec the protocol version header is only sent after negotiation
+              if (session.protocolVersion) headers['MCP-Protocol-Version'] = session.protocolVersion;
+              if (session.sessionId) headers['Mcp-Session-Id'] = session.sessionId;
+
+              const response = await fetch(DOCS_MCP_URL, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(remaining)
+              });
+
+              if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`Docs MCP error: ${response.status} ${response.statusText} - ${errorBody}`);
+              }
+
+              const sessionId = response.headers.get('mcp-session-id') || session.sessionId;
+
+              // Notifications get no response body content we care about, but the
+              // stream still has to be consumed
+              if (payload.id === undefined) {
+                await response.text();
+                return { result: undefined, sessionId };
+              }
+
+              const rawBody = await response.text();
+              const contentType = response.headers.get('content-type') || '';
+
+              let message;
+              if (contentType.includes('text/event-stream')) {
+                for (const event of parseSseEvents(rawBody)) {
+                  if (event.id === payload.id && (event.result !== undefined || event.error)) {
+                    message = event;
+                    break;
+                  }
+                }
+              } else {
+                message = JSON.parse(rawBody);
+              }
+
+              if (!message) {
+                throw new Error(`Docs MCP response for "${payload.method}" did not contain a matching JSON-RPC message`);
+              }
+              if (message.error) {
+                throw new Error(`Docs MCP error: ${message.error.message || JSON.stringify(message.error)}`);
+              }
+
+              return { result: message.result, sessionId };
+            }
+
+            // Parse an SSE body into JSON payloads; a single event may carry several
+            // "data:" lines, which are concatenated with newlines before parsing.
+            function parseSseEvents(rawBody) {
+              const events = [];
+
+              for (const block of rawBody.split(/\r?\n\r?\n/)) {
+                const dataLines = block
+                  .split(/\r?\n/)
+                  .filter(line => line.startsWith('data:'))
+                  .map(line => line.slice(5).replace(/^ /, ''));
+
+                if (dataLines.length === 0) continue;
+
+                try {
+                  events.push(JSON.parse(dataLines.join('\n')));
+                } catch (parseError) {
+                  console.log(`Ignoring non-JSON SSE event: ${parseError.message}`);
+                }
+              }
+
+              return events;
+            }
+
+            // Escape text used as a markdown link label. Titles come from the discussions
+            // API and from the (untrusted) MCP server, so collapse line breaks and escape
+            // the characters that could terminate the label, open raw HTML or turn parts
+            // of the title into emphasis.
+            function escapeLinkText(text) {
+              return text
+                .replace(/\s+/g, ' ')
+                .trim()
+                .replace(/([\\`\[\]<>*_])/g, '\\$1');
+            }
+
+            // Wrap a link target in angle brackets so that URLs containing parentheses
+            // stay intact; the target itself is validated by sanitizeDocsLink.
+            function markdownLinkTarget(url) {
+              return `<${url}>`;
+            }
+
+            // Accept only https links pointing at the official documentation host.
+            // The MCP server is untrusted input, and the resulting link ends up in a
+            // comment posted with GITHUB_TOKEN, so anything else is discarded.
+            function sanitizeDocsLink(link) {
+              let url;
+              try {
+                url = new URL(link);
+              } catch (error) {
+                return null;
+              }
+
+              // The protocol and host allowlist is the actual protection here; `new URL`
+              // has already percent-encoded anything that could break out of the link
+              if (url.protocol !== 'https:' || url.hostname !== DOCS_HOSTNAME) return null;
+
+              return url;
+            }
+
+            // Versioned pages (e.g. /v11/foo) document older releases and are ignored;
+            // only the current documentation is offered as a help topic. A page has to
+            // live *below* the version prefix to be treated as versioned, so a genuine
+            // top-level page such as /v2 is not misclassified.
+            function isCurrentDocsPage(url) {
+              return !/^\/v\d+\/./.test(url.pathname);
+            }
+
+            // Overlap coefficient between the discussion keywords and the documentation
+            // page keywords: the shared keywords are normalised against the smaller of the
+            // two sets, so the score does not collapse for long discussions or long pages.
+            // The page side of that comparison has a lower bound, so a short stub or index
+            // page cannot shrink the denominator until the shared-keyword floor alone
+            // clears the threshold. That floor also keeps very short discussions from
+            // matching on incidental word overlap.
+            function keywordCoverage(queryKeywords, topicKeywords) {
+              const querySet = new Set(queryKeywords);
+              const topicSet = new Set(topicKeywords);
+              if (querySet.size === 0 || topicSet.size === 0) return 0;
+
+              const covered = [...querySet].filter(word => topicSet.has(word));
+              if (covered.length < MIN_HELP_TOPIC_KEYWORDS) return 0;
+
+              const topicSize = Math.max(topicSet.size, MIN_HELP_TOPIC_PAGE_KEYWORDS);
+              return covered.length / Math.min(querySet.size, topicSize);
+            }
+
+            // Score help topics against the discussion, preferring embeddings when available.
+            // Bounded by its own deadline so that a degraded embeddings endpoint cannot
+            // stretch this best-effort lookup across several minutes.
+            async function scoreHelpTopics(query, candidates) {
+              const apiKey = process.env.OPENAI_API_KEY;
+              if (apiKey) {
+                try {
+                  const deadline = Date.now() + HELP_TOPIC_SCORING_BUDGET_MS;
+                  const queryEmbedding = await getQueryEmbedding(query, apiKey);
+                  const topicEmbeddings = await getEmbeddingsWithRetry(candidates.map(c => c.text), apiKey, { deadline });
+                  if (topicEmbeddings.every(embedding => embedding === null)) {
+                    throw new Error('No help topic could be embedded');
+                  }
+                  return candidates.map((candidate, index) => ({
+                    candidate,
+                    // Candidates of a failed batch score 0 and are dropped by the threshold
+                    score: topicEmbeddings[index] ? cosineSimilarity(queryEmbedding, topicEmbeddings[index]) : 0,
+                    threshold: MIN_HELP_TOPIC_SIMILARITY
+                  }));
+                } catch (error) {
+                  core.warning(`Error embedding help topics, falling back to keyword matching: ${error.message}`);
+                }
+              }
+
+              const queryKeywords = extractKeywords(query);
+              return candidates.map(candidate => ({
+                candidate,
+                score: keywordCoverage(queryKeywords, extractKeywords(candidate.text)),
+                threshold: MIN_HELP_TOPIC_RELEVANCE
+              }));
+            }
+
+            // The documentation lookup can be switched off via the DOCS_HELP_TOPICS_ENABLED
+            // repository variable; unrecognized values keep the feature on but are reported.
+            function helpTopicsEnabled() {
+              const configured = process.env.DOCS_HELP_TOPICS_ENABLED || '';
+              const raw = configured.trim().toLowerCase();
+              if (raw === '') return true;
+              if (['false', '0', 'no', 'off'].includes(raw)) return false;
+              if (['true', '1', 'yes', 'on'].includes(raw)) return true;
+
+              core.warning(`Unrecognized DOCS_HELP_TOPICS_ENABLED value "${configured}", keeping help topics enabled`);
+              return true;
+            }
+
+            // Search the OSP documentation for help topics relevant to the discussion
+            async function findHelpTopics(query) {
+              if (!helpTopicsEnabled()) {
+                console.log('Documentation help topics are disabled (DOCS_HELP_TOPICS_ENABLED)');
+                return [];
+              }
+
+              try {
+                const result = await callDocsMcpTool('searchDocumentation', {
+                  query: query.substring(0, 1000)
+                }, Date.now() + DOCS_MCP_BUDGET_MS);
+
+                const candidates = [];
+                const seenPaths = new Set();
+
+                for (const item of result.content) {
+                  if (item.type !== 'text' || !item.text) continue;
+
+                  // Title and link are only read from the leading metadata block, so that a
+                  // page whose body contains a "Link:" line cannot supply them
+                  const metadata = (item.text.match(/^(?:(?:Title|Link):[^\n]*(?:\n|$))+/) || [''])[0];
+                  const titleMatch = metadata.match(/^Title:[ \t]*(.+?)[ \t]*$/m);
+                  const linkMatch = metadata.match(/^Link:[ \t]*(\S+)[ \t]*$/m);
+                  if (!titleMatch || !linkMatch) continue;
+
+                  const url = sanitizeDocsLink(linkMatch[1]);
+                  if (!url) {
+                    console.log(`Skipping help topic with unexpected link: ${linkMatch[1]}`);
+                    continue;
+                  }
+
+                  if (!isCurrentDocsPage(url)) {
+                    console.log(`Skipping help topic from versioned documentation: ${url.href}`);
+                    continue;
+                  }
+
+                  if (seenPaths.has(url.pathname)) continue;
+                  seenPaths.add(url.pathname);
+
+                  const title = titleMatch[1].trim();
+                  // Score against the title and page content only. Only the leading
+                  // metadata block is removed, so page text that happens to contain a
+                  // line starting with "Title:" or "Link:" is preserved.
+                  const content = item.text
+                    .slice(metadata.length)
+                    .replace(/^Content:[ \t]*/, '');
+
+                  candidates.push({ title, link: url.href, text: `${title}\n${content}` });
+                  if (candidates.length >= MAX_HELP_TOPIC_CANDIDATES) break;
+                }
+
+                if (candidates.length === 0) {
+                  console.log('No current documentation pages among the search results');
+                  return [];
+                }
+
+                const scored = await scoreHelpTopics(query, candidates);
+                const topics = scored
+                  .filter(item => item.score >= item.threshold)
+                  .sort((a, b) => b.score - a.score)
+                  .slice(0, MAX_HELP_TOPICS)
+                  .map(item => ({ title: item.candidate.title, link: item.candidate.link }));
+
+                console.log(`Found ${topics.length} relevant help topics in the OSP documentation (${candidates.length} candidates)`);
+                return topics;
+              } catch (error) {
+                // Surfaced as a warning so that a permanent outage of the docs MCP server
+                // is visible in the workflow run instead of looking like "no topics found"
+                core.warning(`Error searching OSP documentation: ${error.message}`);
+                return [];
+              }
+            }
+
             // Main execution
             try {
               // Fetch all existing discussions
               const existingDiscussions = await fetchAllDiscussions();
-              
-              if (existingDiscussions.length === 0) {
-                console.log('No existing discussions found');
-                return;
-              }
-              
+
               // Prepare text for comparison
               const newText = `${discussionTitle}\n${discussionBody}`;
-              
-              // Try AI-based similarity first, fallback to keyword matching
-              let similarDiscussions;
-              if (process.env.OPENAI_API_KEY) {
-                console.log('Using OpenAI for similarity analysis');
-                similarDiscussions = await calculateSimilarityOpenAI(newText, existingDiscussions);
-              }
-              if (!similarDiscussions || similarDiscussions.length === 0) {
-                console.log('Using keyword matching for similarity analysis');
-                similarDiscussions = calculateSimilarityKeywords(newText, existingDiscussions);
-              }
-              
-              // Post comment if similar discussions found
-              if (similarDiscussions.length > 0) {
-                console.log(`Found ${similarDiscussions.length} similar discussions`);
 
-                let commentBody = '🤖 **Discussion Assistant**: I found some similar discussions that might be helpful:\n\n';
-                
-                for (const item of similarDiscussions) {
-                  const { discussion, similarity } = item;
-                  const percentage = Math.round(similarity * 100);
-                  const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
-                  
-                  const safeTitle = discussion.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-                  commentBody += `- [${safeTitle}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
+              // Try AI-based similarity first, fallback to keyword matching
+              let similarDiscussions = [];
+              if (existingDiscussions.length === 0) {
+                console.log('No existing discussions found');
+              } else {
+                if (process.env.OPENAI_API_KEY) {
+                  console.log('Using OpenAI for similarity analysis');
+                  similarDiscussions = await calculateSimilarityOpenAI(newText, existingDiscussions);
                 }
-                
+                if (!similarDiscussions || similarDiscussions.length === 0) {
+                  console.log('Using keyword matching for similarity analysis');
+                  similarDiscussions = calculateSimilarityKeywords(newText, existingDiscussions);
+                }
+              }
+
+              // Look for relevant help topics in the OSP documentation
+              const helpTopics = await findHelpTopics(newText);
+
+              // Post comment if similar discussions and/or help topics were found
+              if (similarDiscussions.length > 0 || helpTopics.length > 0) {
+                console.log(`Found ${similarDiscussions.length} similar discussions and ${helpTopics.length} help topics`);
+
+                let commentBody = '🤖 **Discussion Assistant**\n\n';
+
+                if (similarDiscussions.length > 0) {
+                  commentBody += 'I found some similar discussions that might be helpful:\n\n';
+
+                  for (const item of similarDiscussions) {
+                    const { discussion, similarity } = item;
+                    const percentage = Math.round(similarity * 100);
+                    const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
+
+                    const safeTitle = escapeLinkText(discussion.title);
+                    commentBody += `- [${safeTitle}](${markdownLinkTarget(discussion.url)}) (${percentage}% similar)${answeredTag}\n`;
+                  }
+                }
+
+                if (helpTopics.length > 0) {
+                  if (similarDiscussions.length > 0) commentBody += '\n';
+                  commentBody += 'Relevant help topics from the [Open Systems Pharmacology Documentation](https://docs.open-systems-pharmacology.org/):\n\n';
+
+                  for (const topic of helpTopics) {
+                    const safeTitle = escapeLinkText(topic.title);
+                    commentBody += `- [${safeTitle}](${markdownLinkTarget(topic.link)})\n`;
+                  }
+                }
+
                 // Post the comment using GraphQL
                 const discussionId = context.payload.discussion.node_id;
                 
@@ -342,7 +783,7 @@ jobs:
                 
                 console.log('Comment posted successfully');
               } else {
-                console.log('No similar discussions found above threshold');
+                console.log('No similar discussions above threshold and no relevant help topics found');
               }
               
             } catch (error) {
