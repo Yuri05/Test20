@@ -398,9 +398,10 @@ jobs:
               return url;
             }
 
-            // Versioned pages (e.g. /v13/foo) duplicate the current page (/foo)
-            function normalizedDocsPath(url) {
-              return url.pathname.replace(/^\/v\d+(?=\/|$)/, '') || '/';
+            // Versioned pages (e.g. /v11/foo) document older releases and are ignored;
+            // only the current documentation is offered as a help topic
+            function isCurrentDocsPage(url) {
+              return !/^\/v\d+(\/|$)/.test(url.pathname);
             }
 
             // Share of the discussion keywords that also appear in the documentation page.
@@ -464,9 +465,13 @@ jobs:
                     continue;
                   }
 
-                  const path = normalizedDocsPath(url);
-                  if (seenPaths.has(path)) continue;
-                  seenPaths.add(path);
+                  if (!isCurrentDocsPage(url)) {
+                    console.log(`Skipping help topic from versioned documentation: ${url.href}`);
+                    continue;
+                  }
+
+                  if (seenPaths.has(url.pathname)) continue;
+                  seenPaths.add(url.pathname);
 
                   candidates.push({ title: titleMatch[1].trim(), link: url.href, text: item.text });
                 }
