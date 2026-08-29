@@ -24,6 +24,12 @@ jobs:
             const MAX_RESULTS = 5;
             const MAX_HELP_TOPICS = 5;
             const DOCS_MCP_URL = 'https://docs.open-systems-pharmacology.org/~gitbook/mcp';
+            const DOCS_HOSTNAME = 'docs.open-systems-pharmacology.org';
+            const MCP_PROTOCOL_VERSION = '2025-06-18';
+            const DOCS_MCP_TIMEOUT_MS = 15000; // best-effort enrichment, keep the budget small
+            const MIN_HELP_TOPIC_SIMILARITY = 0.35; // embedding similarity discussion <-> documentation page
+            const MIN_HELP_TOPIC_RELEVANCE = 0.15; // keyword fallback: share of discussion keywords covered by the page
+            const MIN_HELP_TOPIC_KEYWORDS = 3; // keyword fallback: minimum number of shared keywords
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
@@ -285,21 +291,55 @@ jobs:
               return intersection.size / union.size;
             }
             
-            // Call a tool on the OSP documentation MCP server (streamable HTTP transport)
+            // Call a tool on the OSP documentation MCP server (streamable HTTP transport).
+            // NOTE: the discussion title and body are sent to this third-party endpoint.
+            // A fresh `initialize` handshake is performed for every call because the server
+            // is stateless (it returns no `Mcp-Session-Id`); if it ever starts requiring
+            // sessions, the session id would have to be carried over to the tools/call request.
             async function callDocsMcpTool(toolName, args) {
+              await postDocsMcpRequest({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'initialize',
+                params: {
+                  protocolVersion: MCP_PROTOCOL_VERSION,
+                  capabilities: {},
+                  clientInfo: { name: 'discussion-assistant', version: '1.0.0' }
+                }
+              });
+
+              const result = await postDocsMcpRequest({
+                jsonrpc: '2.0',
+                id: 2,
+                method: 'tools/call',
+                params: { name: toolName, arguments: args }
+              });
+
+              if (!result) {
+                throw new Error('Docs MCP returned an empty result');
+              }
+              if (result.isError) {
+                const details = (result.content || [])
+                  .filter(item => item.type === 'text')
+                  .map(item => item.text)
+                  .join('\n');
+                throw new Error(`Docs MCP tool "${toolName}" failed: ${details || 'no details provided'}`);
+              }
+
+              return result;
+            }
+
+            // Send a single JSON-RPC request and return its result
+            async function postDocsMcpRequest(payload) {
               const response = await fetch(DOCS_MCP_URL, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Accept': 'application/json, text/event-stream'
+                  'Accept': 'application/json, text/event-stream',
+                  'MCP-Protocol-Version': MCP_PROTOCOL_VERSION
                 },
-                body: JSON.stringify({
-                  jsonrpc: '2.0',
-                  id: 1,
-                  method: 'tools/call',
-                  params: { name: toolName, arguments: args }
-                }),
-                signal: AbortSignal.timeout(60000)
+                body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(DOCS_MCP_TIMEOUT_MS)
               });
 
               if (!response.ok) {
@@ -312,13 +352,13 @@ jobs:
 
               let message;
               if (contentType.includes('text/event-stream')) {
-                // Parse SSE: collect the first "data:" payload that contains a JSON-RPC response
+                // Parse SSE: pick the "data:" frame carrying the response to our request id
                 for (const line of rawBody.split('\n')) {
                   const trimmed = line.trim();
                   if (!trimmed.startsWith('data:')) continue;
                   try {
                     const parsed = JSON.parse(trimmed.slice(5).trim());
-                    if (parsed.result || parsed.error) {
+                    if (parsed.id === payload.id && (parsed.result !== undefined || parsed.error)) {
                       message = parsed;
                       break;
                     }
@@ -331,13 +371,74 @@ jobs:
               }
 
               if (!message) {
-                throw new Error('Docs MCP response did not contain a JSON-RPC message');
+                throw new Error(`Docs MCP response for "${payload.method}" did not contain a matching JSON-RPC message`);
               }
               if (message.error) {
                 throw new Error(`Docs MCP error: ${message.error.message || JSON.stringify(message.error)}`);
               }
 
               return message.result;
+            }
+
+            // Accept only https links pointing at the official documentation host.
+            // The MCP server is untrusted input, and the resulting link ends up in a
+            // comment posted with GITHUB_TOKEN, so anything else is discarded.
+            function sanitizeDocsLink(link) {
+              let url;
+              try {
+                url = new URL(link);
+              } catch (error) {
+                return null;
+              }
+
+              if (url.protocol !== 'https:' || url.hostname !== DOCS_HOSTNAME) return null;
+              // Characters that would break out of the markdown link target
+              if (/[()<>\s\\]/.test(url.href)) return null;
+
+              return url;
+            }
+
+            // Versioned pages (e.g. /v13/foo) duplicate the current page (/foo)
+            function normalizedDocsPath(url) {
+              return url.pathname.replace(/^\/v\d+(?=\/|$)/, '') || '/';
+            }
+
+            // Share of the discussion keywords that also appear in the documentation page.
+            // Requires a minimum number of shared keywords so that very short discussions
+            // cannot reach the threshold on one or two incidental word matches.
+            function keywordCoverage(queryKeywords, topicKeywords) {
+              const querySet = new Set(queryKeywords);
+              if (querySet.size === 0) return 0;
+
+              const topicSet = new Set(topicKeywords);
+              const covered = [...querySet].filter(word => topicSet.has(word));
+              if (covered.length < MIN_HELP_TOPIC_KEYWORDS) return 0;
+              return covered.length / querySet.size;
+            }
+
+            // Score help topics against the discussion, preferring embeddings when available
+            async function scoreHelpTopics(query, candidates) {
+              const apiKey = process.env.OPENAI_API_KEY;
+              if (apiKey) {
+                try {
+                  const embeddings = await getEmbedding([query, ...candidates.map(c => c.text)], apiKey);
+                  const queryEmbedding = embeddings[0];
+                  return candidates.map((candidate, index) => ({
+                    candidate,
+                    score: cosineSimilarity(queryEmbedding, embeddings[index + 1]),
+                    threshold: MIN_HELP_TOPIC_SIMILARITY
+                  }));
+                } catch (error) {
+                  console.error('Error embedding help topics, falling back to keyword matching:', error);
+                }
+              }
+
+              const queryKeywords = extractKeywords(query);
+              return candidates.map(candidate => ({
+                candidate,
+                score: keywordCoverage(queryKeywords, extractKeywords(candidate.text)),
+                threshold: MIN_HELP_TOPIC_RELEVANCE
+              }));
             }
 
             // Search the OSP documentation for help topics relevant to the discussion
@@ -347,36 +448,42 @@ jobs:
                   query: query.substring(0, 1000)
                 });
 
-                if (result?.isError) {
-                  throw new Error('Docs MCP returned an error result');
-                }
+                const candidates = [];
+                const seenPaths = new Set();
 
-                const topics = [];
-                const seenLinks = new Set();
-
-                for (const item of result?.content || []) {
+                for (const item of result.content || []) {
                   if (item.type !== 'text' || !item.text) continue;
 
-                  const titleMatch = item.text.match(/^Title:\s*(.*)$/m);
+                  const titleMatch = item.text.match(/^Title:\s*(.+)$/m);
                   const linkMatch = item.text.match(/^Link:\s*(\S+)$/m);
-                  if (!linkMatch) continue;
+                  if (!titleMatch || !linkMatch) continue;
 
-                  const link = linkMatch[1];
-                  if (seenLinks.has(link)) continue;
-                  seenLinks.add(link);
+                  const url = sanitizeDocsLink(linkMatch[1]);
+                  if (!url) {
+                    console.log(`Skipping help topic with unexpected link: ${linkMatch[1]}`);
+                    continue;
+                  }
 
-                  topics.push({
-                    title: (titleMatch?.[1] || link).trim(),
-                    link
-                  });
+                  const path = normalizedDocsPath(url);
+                  if (seenPaths.has(path)) continue;
+                  seenPaths.add(path);
 
-                  if (topics.length >= MAX_HELP_TOPICS) break;
+                  candidates.push({ title: titleMatch[1].trim(), link: url.href, text: item.text });
                 }
 
-                console.log(`Found ${topics.length} relevant help topics in the OSP documentation`);
+                const scored = await scoreHelpTopics(query, candidates);
+                const topics = scored
+                  .filter(item => item.score >= item.threshold)
+                  .sort((a, b) => b.score - a.score)
+                  .slice(0, MAX_HELP_TOPICS)
+                  .map(item => ({ title: item.candidate.title, link: item.candidate.link }));
+
+                console.log(`Found ${topics.length} relevant help topics in the OSP documentation (${candidates.length} candidates)`);
                 return topics;
               } catch (error) {
-                console.error('Error searching OSP documentation:', error);
+                // Surfaced as a warning so that a permanent outage of the docs MCP server
+                // is visible in the workflow run instead of looking like "no topics found"
+                core.warning(`Error searching OSP documentation: ${error.message}`);
                 return [];
               }
             }
