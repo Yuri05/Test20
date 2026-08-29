@@ -17,8 +17,9 @@ jobs:
         uses: actions/github-script@v8
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # Set to 'false' to stop sending discussion text to the documentation MCP server
-          DOCS_HELP_TOPICS_ENABLED: ${{ vars.DOCS_HELP_TOPICS_ENABLED || 'true' }}
+          # Set to 'false' to stop sending discussion text to the documentation
+          # MCP server; unset means enabled
+          DOCS_HELP_TOPICS_ENABLED: ${{ vars.DOCS_HELP_TOPICS_ENABLED }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -29,10 +30,13 @@ jobs:
             const DOCS_HOSTNAME = 'docs.open-systems-pharmacology.org';
             const MCP_PROTOCOL_VERSION = '2025-06-18';
             const SUPPORTED_MCP_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26'];
+            // The MCP-Protocol-Version header was introduced in 2025-06-18 and must
+            // not be sent when an older revision has been negotiated
+            const MCP_VERSIONS_WITH_PROTOCOL_HEADER = ['2025-06-18'];
             const DOCS_MCP_BUDGET_MS = 15000; // total budget for the whole best-effort docs lookup
             const MAX_HELP_TOPIC_CANDIDATES = 20; // cap the inputs of a single embeddings request
             const MIN_HELP_TOPIC_SIMILARITY = 0.45; // embedding similarity discussion <-> documentation page
-            const MIN_HELP_TOPIC_RELEVANCE = 0.35; // keyword fallback: share of discussion keywords covered by the page
+            const MIN_HELP_TOPIC_RELEVANCE = 0.35; // keyword fallback: overlap coefficient discussion <-> page keywords
             const MIN_HELP_TOPIC_KEYWORDS = 4; // keyword fallback: absolute floor of shared keywords
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
@@ -214,6 +218,37 @@ jobs:
               return queryEmbeddingCache.get(text);
             }
 
+            // Embed a list of texts, batching the requests and retrying transient
+            // failures with exponential backoff. Throws if a batch cannot be embedded,
+            // so that callers do not silently work with a partial result.
+            const EMBEDDING_BATCH_SIZE = 50;
+            const EMBEDDING_MAX_RETRIES = 3;
+            async function getEmbeddingsWithRetry(texts, apiKey) {
+              const embeddings = [];
+
+              for (let i = 0; i < texts.length; i += EMBEDDING_BATCH_SIZE) {
+                const batch = texts.slice(i, i + EMBEDDING_BATCH_SIZE);
+
+                for (let attempt = 1; ; attempt++) {
+                  try {
+                    const batchEmbeddings = await getEmbedding(batch, apiKey);
+                    if (!Array.isArray(batchEmbeddings) || batchEmbeddings.length !== batch.length) {
+                      throw new Error(`Expected ${batch.length} embeddings, got ${batchEmbeddings?.length || 0}`);
+                    }
+                    embeddings.push(...batchEmbeddings);
+                    break;
+                  } catch (batchError) {
+                    if (attempt >= EMBEDDING_MAX_RETRIES) throw batchError;
+                    const backoff = Math.pow(2, attempt) * 1000;
+                    console.log(`Embedding attempt ${attempt}/${EMBEDDING_MAX_RETRIES} failed (${batchError.message}), retrying in ${backoff / 1000}s...`);
+                    await new Promise(resolve => setTimeout(resolve, backoff));
+                  }
+                }
+              }
+
+              return embeddings;
+            }
+
             // Function to get embedding from OpenAI
             async function getEmbedding(text, apiKey) {
               const response = await fetch('https://api.openai.com/v1/embeddings', {
@@ -330,7 +365,10 @@ jobs:
 
               const session = {
                 deadline,
-                protocolVersion: negotiatedVersion,
+                // Only revisions that define the header get it on subsequent requests
+                protocolVersion: MCP_VERSIONS_WITH_PROTOCOL_HEADER.includes(negotiatedVersion)
+                  ? negotiatedVersion
+                  : null,
                 sessionId: handshake.sessionId
               };
 
@@ -370,22 +408,30 @@ jobs:
               }
             }
 
-            // Release a server-side session, if the server created one
+            // Release a server-side session, if the server created one. Skipped once the
+            // time budget is spent so that a timed-out lookup is not delayed any further
+            // and its original error is not obscured by a second warning.
             async function terminateDocsMcpSession(session) {
               if (!session.sessionId) return;
 
+              const remaining = session.deadline - Date.now();
+              if (remaining <= 0) {
+                console.log('Skipping docs MCP session termination: time budget exhausted');
+                return;
+              }
+
               try {
+                const headers = { 'Mcp-Session-Id': session.sessionId };
+                if (session.protocolVersion) headers['MCP-Protocol-Version'] = session.protocolVersion;
+
                 const response = await fetch(DOCS_MCP_URL, {
                   method: 'DELETE',
-                  headers: {
-                    'MCP-Protocol-Version': session.protocolVersion,
-                    'Mcp-Session-Id': session.sessionId
-                  },
-                  signal: AbortSignal.timeout(Math.max(session.deadline - Date.now(), 1000))
+                  headers,
+                  signal: AbortSignal.timeout(remaining)
                 });
                 await response.text();
               } catch (error) {
-                core.warning(`Could not terminate docs MCP session: ${error.message}`);
+                console.log(`Could not terminate docs MCP session: ${error.message}`);
               }
             }
 
@@ -476,12 +522,13 @@ jobs:
 
             // Escape text used as a markdown link label. Titles come from the discussions
             // API and from the (untrusted) MCP server, so collapse line breaks and escape
-            // the characters that could terminate the label or open raw HTML.
+            // the characters that could terminate the label, open raw HTML or turn parts
+            // of the title into emphasis.
             function escapeLinkText(text) {
               return text
                 .replace(/\s+/g, ' ')
                 .trim()
-                .replace(/([\\`\[\]<>])/g, '\\$1');
+                .replace(/([\\`\[\]<>*_])/g, '\\$1');
             }
 
             // Wrap a link target in angle brackets so that URLs containing parentheses
@@ -514,17 +561,19 @@ jobs:
               return !/^\/v\d+(\/|$)/.test(url.pathname);
             }
 
-            // Share of the discussion keywords that also appear in the documentation page.
-            // Requires a minimum number of shared keywords so that very short discussions
-            // cannot reach the threshold on one or two incidental word matches.
+            // Overlap coefficient between the discussion keywords and the documentation
+            // page keywords: the shared keywords are normalised against the smaller of the
+            // two sets, so the score does not collapse for long discussions or long pages.
+            // A minimum number of shared keywords is still required so that very short
+            // discussions cannot reach the threshold on one or two incidental matches.
             function keywordCoverage(queryKeywords, topicKeywords) {
               const querySet = new Set(queryKeywords);
-              if (querySet.size === 0) return 0;
-
               const topicSet = new Set(topicKeywords);
+              if (querySet.size === 0 || topicSet.size === 0) return 0;
+
               const covered = [...querySet].filter(word => topicSet.has(word));
               if (covered.length < MIN_HELP_TOPIC_KEYWORDS) return 0;
-              return covered.length / querySet.size;
+              return covered.length / Math.min(querySet.size, topicSet.size);
             }
 
             // Score help topics against the discussion, preferring embeddings when available
@@ -533,10 +582,7 @@ jobs:
               if (apiKey) {
                 try {
                   const queryEmbedding = await getQueryEmbedding(query, apiKey);
-                  const topicEmbeddings = await getEmbedding(candidates.map(c => c.text), apiKey);
-                  if (!Array.isArray(topicEmbeddings) || topicEmbeddings.length !== candidates.length) {
-                    throw new Error(`Expected ${candidates.length} embeddings, got ${topicEmbeddings?.length || 0}`);
-                  }
+                  const topicEmbeddings = await getEmbeddingsWithRetry(candidates.map(c => c.text), apiKey);
                   return candidates.map((candidate, index) => ({
                     candidate,
                     score: cosineSimilarity(queryEmbedding, topicEmbeddings[index]),
@@ -558,12 +604,13 @@ jobs:
             // The documentation lookup can be switched off via the DOCS_HELP_TOPICS_ENABLED
             // repository variable; unrecognized values keep the feature on but are reported.
             function helpTopicsEnabled() {
-              const raw = (process.env.DOCS_HELP_TOPICS_ENABLED || '').trim().toLowerCase();
+              const configured = process.env.DOCS_HELP_TOPICS_ENABLED || '';
+              const raw = configured.trim().toLowerCase();
               if (raw === '') return true;
               if (['false', '0', 'no', 'off'].includes(raw)) return false;
               if (['true', '1', 'yes', 'on'].includes(raw)) return true;
 
-              core.warning(`Unrecognized DOCS_HELP_TOPICS_ENABLED value "${raw}", keeping help topics enabled`);
+              core.warning(`Unrecognized DOCS_HELP_TOPICS_ENABLED value "${configured}", keeping help topics enabled`);
               return true;
             }
 
@@ -604,10 +651,12 @@ jobs:
                   seenPaths.add(url.pathname);
 
                   const title = titleMatch[1].trim();
-                  // Score against the title and page content only, without the Title:/Link: boilerplate
+                  // Score against the title and page content only. Only the leading
+                  // metadata block is removed, so page text that happens to contain a
+                  // line starting with "Title:" or "Link:" is preserved.
                   const content = item.text
-                    .replace(/^(?:Title|Link):[^\n]*\n?/gm, '')
-                    .replace(/^Content:[ \t]*/gm, '');
+                    .replace(/^(?:(?:Title|Link):[^\n]*(?:\n|$))+/, '')
+                    .replace(/^Content:[ \t]*/, '');
 
                   candidates.push({ title, link: url.href, text: `${title}\n${content}` });
                   if (candidates.length >= MAX_HELP_TOPIC_CANDIDATES) break;
@@ -682,7 +731,7 @@ jobs:
 
                 if (helpTopics.length > 0) {
                   if (similarDiscussions.length > 0) commentBody += '\n';
-                  commentBody += 'Relevant help topics from the [Open Systems Pharmacology Documentation](https://docs.open-systems-pharmacology.org/):\n\n';
+                  commentBody += `Relevant help topics from the [Open Systems Pharmacology Documentation](${markdownLinkTarget('https://docs.open-systems-pharmacology.org/')}):\n\n`;
 
                   for (const topic of helpTopics) {
                     const safeTitle = escapeLinkText(topic.title);
