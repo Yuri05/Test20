@@ -17,6 +17,8 @@ jobs:
         uses: actions/github-script@v8
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # Set to 'false' to stop sending discussion text to the documentation MCP server
+          DOCS_HELP_TOPICS_ENABLED: ${{ vars.DOCS_HELP_TOPICS_ENABLED || 'true' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -26,10 +28,10 @@ jobs:
             const DOCS_MCP_URL = 'https://docs.open-systems-pharmacology.org/~gitbook/mcp';
             const DOCS_HOSTNAME = 'docs.open-systems-pharmacology.org';
             const MCP_PROTOCOL_VERSION = '2025-06-18';
-            const DOCS_MCP_TIMEOUT_MS = 15000; // best-effort enrichment, keep the budget small
-            const MIN_HELP_TOPIC_SIMILARITY = 0.35; // embedding similarity discussion <-> documentation page
-            const MIN_HELP_TOPIC_RELEVANCE = 0.15; // keyword fallback: share of discussion keywords covered by the page
-            const MIN_HELP_TOPIC_KEYWORDS = 3; // keyword fallback: minimum number of shared keywords
+            const DOCS_MCP_BUDGET_MS = 15000; // total budget for the whole best-effort docs lookup
+            const MIN_HELP_TOPIC_SIMILARITY = 0.45; // embedding similarity discussion <-> documentation page
+            const MIN_HELP_TOPIC_RELEVANCE = 0.30; // keyword fallback: share of discussion keywords covered by the page
+            const MIN_HELP_TOPIC_KEYWORDS = 3; // keyword fallback: absolute floor of shared keywords
             const MIN_SIMILARITY_TO_COMMENT = 0.65;
             const MIN_KEYWORD_SIMILARITY = 0.20;
             const IGNORED_CATEGORIES = ['Announcement', 'Announcements', 'Polls', 'Poll']; // Categories to ignore
@@ -122,7 +124,7 @@ jobs:
               
               try {
                 // Get embedding for new discussion
-                const newEmbedding = await getEmbedding(newText, apiKey);
+                const newEmbedding = await getQueryEmbedding(newText, apiKey);
                 
                 // Prepare texts for batch embedding with indices
                 const existingTexts = existingDiscussions.map(d => `${d.title}\n${d.body || ''}`);
@@ -195,11 +197,21 @@ jobs:
                 return similarities.slice(0, MAX_RESULTS);
                 
               } catch (error) {
-                console.error('Error calculating similarity:', error);
+                core.warning(`Error calculating similarity: ${error.message}`);
                 return [];
               }
             }
             
+            // Embedding of the new discussion text, computed once and reused by the
+            // discussion similarity and the documentation help topic scoring
+            const queryEmbeddingCache = new Map();
+            async function getQueryEmbedding(text, apiKey) {
+              if (!queryEmbeddingCache.has(text)) {
+                queryEmbeddingCache.set(text, await getEmbedding(text, apiKey));
+              }
+              return queryEmbeddingCache.get(text);
+            }
+
             // Function to get embedding from OpenAI
             async function getEmbedding(text, apiKey) {
               const response = await fetch('https://api.openai.com/v1/embeddings', {
@@ -292,12 +304,13 @@ jobs:
             }
             
             // Call a tool on the OSP documentation MCP server (streamable HTTP transport).
-            // NOTE: the discussion title and body are sent to this third-party endpoint.
-            // A fresh `initialize` handshake is performed for every call because the server
-            // is stateless (it returns no `Mcp-Session-Id`); if it ever starts requiring
-            // sessions, the session id would have to be carried over to the tools/call request.
-            async function callDocsMcpTool(toolName, args) {
-              await postDocsMcpRequest({
+            // NOTE: the discussion title and body are sent to this third-party endpoint;
+            // set the DOCS_HELP_TOPICS_ENABLED repository variable to 'false' to disable this.
+            // The full handshake (initialize -> notifications/initialized -> tools/call) is
+            // performed per run, carrying over the negotiated protocol version and, if the
+            // server is stateful, the Mcp-Session-Id it returns.
+            async function callDocsMcpTool(toolName, args, deadline) {
+              const handshake = await postDocsMcpRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'initialize',
@@ -306,15 +319,28 @@ jobs:
                   capabilities: {},
                   clientInfo: { name: 'discussion-assistant', version: '1.0.0' }
                 }
-              });
+              }, { deadline });
 
-              const result = await postDocsMcpRequest({
+              const session = {
+                deadline,
+                protocolVersion: handshake.result?.protocolVersion || MCP_PROTOCOL_VERSION,
+                sessionId: handshake.sessionId
+              };
+
+              // Required by the spec before any further requests
+              await postDocsMcpRequest({
+                jsonrpc: '2.0',
+                method: 'notifications/initialized'
+              }, session);
+
+              const response = await postDocsMcpRequest({
                 jsonrpc: '2.0',
                 id: 2,
                 method: 'tools/call',
                 params: { name: toolName, arguments: args }
-              });
+              }, session);
 
+              const result = response.result;
               if (!result) {
                 throw new Error('Docs MCP returned an empty result');
               }
@@ -325,21 +351,34 @@ jobs:
                   .join('\n');
                 throw new Error(`Docs MCP tool "${toolName}" failed: ${details || 'no details provided'}`);
               }
+              if (!Array.isArray(result.content)) {
+                throw new Error(`Docs MCP tool "${toolName}" returned no content array (unexpected response shape)`);
+              }
 
               return result;
             }
 
-            // Send a single JSON-RPC request and return its result
-            async function postDocsMcpRequest(payload) {
+            // Send a single JSON-RPC request (or notification) and return its result
+            // plus the session id, honouring the shared deadline of the docs lookup.
+            async function postDocsMcpRequest(payload, session) {
+              const remaining = session.deadline - Date.now();
+              if (remaining <= 0) {
+                throw new Error('Docs MCP time budget exhausted');
+              }
+
+              const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json, text/event-stream'
+              };
+              // Per spec the protocol version header is only sent after negotiation
+              if (session.protocolVersion) headers['MCP-Protocol-Version'] = session.protocolVersion;
+              if (session.sessionId) headers['Mcp-Session-Id'] = session.sessionId;
+
               const response = await fetch(DOCS_MCP_URL, {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json, text/event-stream',
-                  'MCP-Protocol-Version': MCP_PROTOCOL_VERSION
-                },
+                headers,
                 body: JSON.stringify(payload),
-                signal: AbortSignal.timeout(DOCS_MCP_TIMEOUT_MS)
+                signal: AbortSignal.timeout(remaining)
               });
 
               if (!response.ok) {
@@ -347,23 +386,20 @@ jobs:
                 throw new Error(`Docs MCP error: ${response.status} ${response.statusText} - ${errorBody}`);
               }
 
+              const sessionId = response.headers.get('mcp-session-id') || session.sessionId;
+
+              // Notifications get no response body
+              if (payload.id === undefined) return { result: undefined, sessionId };
+
               const rawBody = await response.text();
               const contentType = response.headers.get('content-type') || '';
 
               let message;
               if (contentType.includes('text/event-stream')) {
-                // Parse SSE: pick the "data:" frame carrying the response to our request id
-                for (const line of rawBody.split('\n')) {
-                  const trimmed = line.trim();
-                  if (!trimmed.startsWith('data:')) continue;
-                  try {
-                    const parsed = JSON.parse(trimmed.slice(5).trim());
-                    if (parsed.id === payload.id && (parsed.result !== undefined || parsed.error)) {
-                      message = parsed;
-                      break;
-                    }
-                  } catch (parseError) {
-                    // Ignore non-JSON data lines
+                for (const event of parseSseEvents(rawBody)) {
+                  if (event.id === payload.id && (event.result !== undefined || event.error)) {
+                    message = event;
+                    break;
                   }
                 }
               } else {
@@ -377,7 +413,40 @@ jobs:
                 throw new Error(`Docs MCP error: ${message.error.message || JSON.stringify(message.error)}`);
               }
 
-              return message.result;
+              return { result: message.result, sessionId };
+            }
+
+            // Parse an SSE body into JSON payloads; a single event may carry several
+            // "data:" lines, which are concatenated with newlines before parsing.
+            function parseSseEvents(rawBody) {
+              const events = [];
+
+              for (const block of rawBody.split(/\r?\n\r?\n/)) {
+                const dataLines = block
+                  .split(/\r?\n/)
+                  .filter(line => line.startsWith('data:'))
+                  .map(line => line.slice(5).replace(/^ /, ''));
+
+                if (dataLines.length === 0) continue;
+
+                try {
+                  events.push(JSON.parse(dataLines.join('\n')));
+                } catch (parseError) {
+                  // Ignore non-JSON events (e.g. keep-alive comments)
+                }
+              }
+
+              return events;
+            }
+
+            // Escape text used as a markdown link label. Titles come from the discussions
+            // API and from the (untrusted) MCP server, so collapse line breaks and escape
+            // the characters that carry markdown/HTML meaning.
+            function escapeLinkText(text) {
+              return text
+                .replace(/\s+/g, ' ')
+                .trim()
+                .replace(/([\\`*_{}\[\]()<>#+\-!|~])/g, '\\$1');
             }
 
             // Accept only https links pointing at the official documentation host.
@@ -422,15 +491,15 @@ jobs:
               const apiKey = process.env.OPENAI_API_KEY;
               if (apiKey) {
                 try {
-                  const embeddings = await getEmbedding([query, ...candidates.map(c => c.text)], apiKey);
-                  const queryEmbedding = embeddings[0];
+                  const queryEmbedding = await getQueryEmbedding(query, apiKey);
+                  const topicEmbeddings = await getEmbedding(candidates.map(c => c.text), apiKey);
                   return candidates.map((candidate, index) => ({
                     candidate,
-                    score: cosineSimilarity(queryEmbedding, embeddings[index + 1]),
+                    score: cosineSimilarity(queryEmbedding, topicEmbeddings[index]),
                     threshold: MIN_HELP_TOPIC_SIMILARITY
                   }));
                 } catch (error) {
-                  console.error('Error embedding help topics, falling back to keyword matching:', error);
+                  core.warning(`Error embedding help topics, falling back to keyword matching: ${error.message}`);
                 }
               }
 
@@ -444,15 +513,20 @@ jobs:
 
             // Search the OSP documentation for help topics relevant to the discussion
             async function findHelpTopics(query) {
+              if (process.env.DOCS_HELP_TOPICS_ENABLED === 'false') {
+                console.log('Documentation help topics are disabled (DOCS_HELP_TOPICS_ENABLED=false)');
+                return [];
+              }
+
               try {
                 const result = await callDocsMcpTool('searchDocumentation', {
                   query: query.substring(0, 1000)
-                });
+                }, Date.now() + DOCS_MCP_BUDGET_MS);
 
                 const candidates = [];
                 const seenPaths = new Set();
 
-                for (const item of result.content || []) {
+                for (const item of result.content) {
                   if (item.type !== 'text' || !item.text) continue;
 
                   const titleMatch = item.text.match(/^Title:\s*(.+)$/m);
@@ -473,7 +547,18 @@ jobs:
                   if (seenPaths.has(url.pathname)) continue;
                   seenPaths.add(url.pathname);
 
-                  candidates.push({ title: titleMatch[1].trim(), link: url.href, text: item.text });
+                  const title = titleMatch[1].trim();
+                  // Score against the title and page content only, without the Title:/Link: boilerplate
+                  const content = item.text
+                    .replace(/^(?:Title|Link):[^\n]*\n?/gm, '')
+                    .replace(/^Content:[ \t]*/m, '');
+
+                  candidates.push({ title, link: url.href, text: `${title}\n${content}` });
+                }
+
+                if (candidates.length === 0) {
+                  console.log('No current documentation pages among the search results');
+                  return [];
                 }
 
                 const scored = await scoreHelpTopics(query, candidates);
@@ -533,7 +618,7 @@ jobs:
                     const percentage = Math.round(similarity * 100);
                     const answeredTag = discussion.answer ? ' ✅ (Answered)' : '';
 
-                    const safeTitle = discussion.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                    const safeTitle = escapeLinkText(discussion.title);
                     commentBody += `- [${safeTitle}](${discussion.url}) (${percentage}% similar)${answeredTag}\n`;
                   }
                 }
@@ -543,7 +628,7 @@ jobs:
                   commentBody += 'Relevant help topics from the [Open Systems Pharmacology Documentation](https://docs.open-systems-pharmacology.org/):\n\n';
 
                   for (const topic of helpTopics) {
-                    const safeTitle = topic.title.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+                    const safeTitle = escapeLinkText(topic.title);
                     commentBody += `- [${safeTitle}](${topic.link})\n`;
                   }
                 }
