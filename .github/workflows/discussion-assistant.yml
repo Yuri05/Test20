@@ -33,6 +33,8 @@ jobs:
             // The MCP-Protocol-Version header was introduced in 2025-06-18 and must
             // not be sent when an older revision has been negotiated
             const MCP_VERSIONS_WITH_PROTOCOL_HEADER = ['2025-06-18'];
+            // The docs MCP server rejects search queries longer than 512 characters
+            const DOCS_MCP_MAX_QUERY_LENGTH = 512;
             const DOCS_MCP_BUDGET_MS = 15000; // budget for the MCP round-trips of the docs lookup
             const DOCS_MCP_CLEANUP_BUDGET_MS = 3000; // independent budget for releasing the MCP session
             const HELP_TOPIC_SCORING_BUDGET_MS = 30000; // budget for scoring the retrieved candidates
@@ -635,6 +637,18 @@ jobs:
               return true;
             }
 
+            // The search endpoint enforces a hard limit on the query length, so the
+            // discussion text is shortened to fit; the cut is made at the last word
+            // boundary to avoid ending the query on a fragment of a word.
+            function truncateSearchQuery(query) {
+              const collapsed = query.replace(/\s+/g, ' ').trim();
+              if (collapsed.length <= DOCS_MCP_MAX_QUERY_LENGTH) return collapsed;
+
+              const clipped = collapsed.slice(0, DOCS_MCP_MAX_QUERY_LENGTH);
+              const lastSpace = clipped.lastIndexOf(' ');
+              return (lastSpace > 0 ? clipped.slice(0, lastSpace) : clipped).trim();
+            }
+
             // Search the OSP documentation for help topics relevant to the discussion
             async function findHelpTopics(query) {
               if (!helpTopicsEnabled()) {
@@ -642,9 +656,15 @@ jobs:
                 return [];
               }
 
+              const searchQuery = truncateSearchQuery(query);
+              if (!searchQuery) {
+                console.log('Discussion has no searchable text, skipping documentation lookup');
+                return [];
+              }
+
               try {
                 const result = await callDocsMcpTool('searchDocumentation', {
-                  query: query.substring(0, 1000)
+                  query: searchQuery
                 }, Date.now() + DOCS_MCP_BUDGET_MS);
 
                 const candidates = [];
